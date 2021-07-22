@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="cz" xmlns:th="www.thymeleaf.org">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Úvodní stránka</title>
+</head>
+<style>
+    form {
+        width: 700px;
+        margin: auto;
+    }
+
+    #registration-form{
+        display: none;
+    }
+    button{
+        position: relative;
+        top: 2vh;
+        left: 45vw;
+    }
+</style>
+<body>
+<button class="btn btn-secondary" id="login-button">Přihlásit se </button>
+<button class="btn btn-secondary" id="register-button">Registrovat se </button>
+<H1 th:text="${message}"></H1>
+<form th:action="@{/login}" id="login-form" method="post">
+    <div class="form-group">
+        <label for="username">Uživatelké jméno</label>
+        <input required class="form-control" type="text" id="username" name="username">
+    </div>
+    <br/>
+    <div class="form-group">
+        <label for="password">Heslo</label>
+        <input required class="form-control" type="password" id="password" name="password">
+    </div>
+    <br>
+    <input class="btn btn-primary" type="submit" name="submit" value="Odeslat data">
+    <br/>
+</form>
+
+
+<form id="registration-form" action="#"  th:action="@{/register}" th:object="${uzivatelRegistrace}" method="post">
+    <div class="form-group">
+        <label for="registration-username">Uživatelké jméno</label>
+        <input th:field="*{username}" required minlength="5" class="form-control" type="text" id="registration-username" name="registration-username">
+    </div>
+    <br/>
+    <div class="form-group">
+        <label for="registration-password">Heslo</label>
+        <input th:field="*{password}" required minlength="5" class="form-control" type="password" id="registration-password" name="registration-password">
+    </div>
+    <div class="form-group">
+        <label for="registration-password-again">Heslo znovu</label>
+        <input th:field="*{passwordAgain}" required minlength="5" class="form-control" type="password" id="registration-password-again" name="registration-password-again">
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="email">E-mail</label>
+        <input th:field="*{email}" required class="form-control" type="email" id="email" name="email">
+    </div>
+    <div class="form-group">
+        <label for="firstName">Křestní jméno</label>
+        <input th:field="*{firstName}" required class="form-control" type="text" id="firstName" name="firstName">
+    </div>
+    <div class="form-group">
+        <label for="lastName">Příjmení</label>
+        <input th:field="*{lastName}" required class="form-control" type="text" id="lastName" name="lastName">
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="kod-skoly">Identifikační kód školy</label>
+        <input th:field="*{universityIdentificationCode}" required class="form-control" type="password" id="kod-skoly" name="kod-skoly">
+    </div>
+    <br>
+    <input class="btn btn-primary" type="submit" name="submit" value="Odeslat data">
+    <br/>
+</form>
+<script>
+    // defaultně jde vidět přihlašovací formulář a ne registrační
+    var registrationFormVisible = false;
+    var loginFormVisible = true;
+
+    var loginBtn = document.getElementById("login-button");
+    loginBtn.addEventListener("click",loginBtnClicked);
+
+
+    var registerBtn = document.getElementById("register-button");
+    registerBtn.addEventListener("click", registerBtnClicked);
+
+    function registerBtnClicked(event) {
+
+        if (registrationFormVisible === false && loginFormVisible === true){
+            document.getElementById("registration-form").style.display = "block";
+            document.getElementById("login-form").style.display = "none";
+            loginFormVisible = false;
+            registrationFormVisible = true;
+        }
+
+    }
+
+    function loginBtnClicked(event) {
+        // je zobrazen registrační formulář a má se provést změna
+        if (registrationFormVisible === true && loginFormVisible === false){
+            // skryju registrační formulář
+            document.getElementById("registration-form").style.display = "none";
+            //zobrazím přihlašovací formulář
+            document.getElementById("login-form").style.display = "block";
+            //nastavim správně stavové proměné
+            loginFormVisible = true;
+            registrationFormVisible = false;
+        }
+
+    }
+</script>
+
+</body>
+</html>

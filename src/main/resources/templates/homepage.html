@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+Jste prihlaseny jako: <h1 th:text="${user.getUsername()}"></h1>
+
+
+<form method="get" action="/logout">
+  <button type="submit">Odhlásit se</button>
+</form>
+</body>
+</html>
