@@ -7,6 +7,8 @@ import java.util.List;
 @Table(name = "studium")
 public class Studium extends BaseEntity{
 
+    private String formaStudia;
+
     @ManyToOne
     @JoinColumn(name = "program_id", referencedColumnName = "id")
     private Program program;

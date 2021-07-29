@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "student")
 public class Student extends BaseEntity{
+    private String studentovoId;
     private Pohlavi pohlavi;
     @OneToMany(mappedBy = "student")
     private List<Studium> studia;
