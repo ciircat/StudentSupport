@@ -73,32 +73,20 @@
 
       margin-left: 10vw;
     }
+    #exam-results{
+      height: 34%;
+      border: 2px solid black
+    }
+    #number-of-attemps{
+      height: 33%;
+      border: 2px solid black
+    }
+    #pass-fail-ratio{
+      height: 33%;
+      border: 2px solid black
+    }
 
 
-    #line-graph{
-      height: 60%;
-
-    }
-    #bar-graph{
-      height: 40%;
-
-    }
-    #myChart{
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-    #myBarChart{
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
 
 
   </style>
@@ -122,13 +110,13 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Study overview</a>
+            <a class="nav-link" th:href="@{/user/homepage}">Study overview</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/coursesOverview}">Courses overview</a>
+            <a class="nav-link"  th:href="@{/coursesOverview}">Courses overview</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/studentPaths}">Student paths</a>
+            <a class="nav-link active" aria-current="page" href="#">Student paths</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">About project</a>
@@ -142,9 +130,11 @@
       <form id="select-form" action="#" >
         <div class="form-group">
           <label for="select-faculty">Select faculty</label>
-          <select th:field="*{fakulty}" class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
-            <option th:each="i : ${fakulty}" th:value="${i.getZkratka()}" th:text="${i.getNazevFakulty()}">
-            </option>
+          <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
+            <option selected>Fakulty</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
           </select>
         </div>
         <br/>
@@ -181,102 +171,41 @@
         <input id="show-data" class="btn btn-primary" type="submit" name="submit" value="Show data">
         <br/>
       </form>
-<div id="student-data">
-      <div id="number-of-students">
-        Number of students
+      <div id="student-data">
+        <div id="number-of-students">
+          Number of students
+        </div>
+        <div id="pass-students-winter">
+          Pass students winter
+        </div>
+        <div id="fail-students-winter">
+          Fail students winter
+        </div>
+        <div id="pass-students-summer">
+          Pass students summer
+        </div>
+        <div id="fail-students-summer">
+          Fail students summer
+        </div>
+        <div id="fail-students-in-total">
+          Fail students in total
+        </div>
+        <br/>
+
       </div>
-      <div id="pass-students-winter">
-        Pass students winter
-      </div>
-      <div id="fail-students-winter">
-        Fail students winter
-      </div>
-      <div id="pass-students-summer">
-        Pass students summer
-      </div>
-      <div id="fail-students-summer">
-        Fail students summer
-      </div>
-      <div id="fail-students-in-total">
-        Fail students in total
-      </div>
-  <br/>
-  <div id="intervention-start">Intervention credit interval start</div>
-  <div id="intervention-stop">Intervention credit interval stop</div>
-</div>
 
     </div>
     <div id="graphs">
-      <div id="line-graph">
-        <canvas id="myChart"></canvas>
-
-      </div>
-      <div id="bar-graph">
 
 
-      </div>
 
     </div>
 
   </div>
 
-  Jste prihlaseny jako: <h1 th:text="${user.getUsername()}"></h1>
 
+  <script>
 
-  <form method="get" action="/logout">
-    <button type="submit">Odhlásit se</button>
-  </form>
-</div>
-<script>
-
-  let ctx = document.getElementById('myChart').getContext('2d');
-  console.log(myChart);
-  var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['week1','week2','week3','week4','week5','week6','week7','week8','week9','week10','week11','week12','week13','week14', ],
-      datasets: [{
-        label: '# of Credits',
-        data: [0,0,2,4,6,8,10,12,14,16,18,20,22,24],
-
-        borderColor: [
-          'rgba(255, 99, 132, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-  let ctxBar = document.getElementById('myBarChart').getContext('2d');
-  console.log(myChart);
-  var myChart = new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-      labels: ['week1','week2','week3','week4','week5','week6','week7','week8','week9','week10','week11','week12','week13','week14', ],
-      datasets: [{
-        label: '# of Credits',
-        data: [0,0,2,4,6,8,10,12,14,16,18,20,22,24],
-
-        borderColor: [
-          'rgba(255, 99, 132, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-</script>
+  </script>
 </body>
 </html>

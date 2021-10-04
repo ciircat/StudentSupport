@@ -3,6 +3,7 @@ package com.ciircat.studentsupport.controllers;
 import com.ciircat.studentsupport.commands.UserCommand;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -15,4 +16,6 @@ public class IndexController {
         model.addAttribute("uzivatelRegistrace", userCommand);
         return "index";
     }
+
+
 }

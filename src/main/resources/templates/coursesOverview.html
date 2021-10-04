@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+
+        span{
+            border-width: 50px;
+            border-color: black;
+        }
+        #container{
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+
+        }
+        #content{
+            display: flex;
+            flex-direction: row;
+            flex-grow:10;
+        }
+        #side-menu{
+
+
+
+        }
+
+        #number-of-students{
+            background-color: greenyellow;
+            height: 5vh;
+            width: 15vw;
+        }
+        #pass-students-winter{
+            background-color: green;
+            height: 5vh;
+            width: 15vw;
+        }
+        #pass-students-summer{
+            background-color: green;
+            height: 5vh;
+            width: 15vw;
+        }
+
+        #fail-students-summer{
+            background-color: orangered;
+            height: 5vh;
+            width: 15vw;
+        }
+        #fail-students-winter{
+            background-color: orangered;
+            height: 5vh;
+            width: 15vw;
+        }
+        #fail-students-in-total{
+            background-color: orangered;
+            height: 5vh;
+            width: 15vw;
+        }
+        #show-data{
+            margin-left: 4vw;
+        }
+
+        #student-data{
+            margin-top: 5vh;
+        }
+        #graphs{
+            display: flex;
+            flex-direction: column;
+            flex-grow: 10;
+            position: relative;
+
+            margin-left: 10vw;
+        }
+        #exam-results{
+            height: 34%;
+            border: 2px solid black
+        }
+        #number-of-attemps{
+            height: 33%;
+            border: 2px solid black
+        }
+        #pass-fail-ratio{
+            height: 33%;
+            border: 2px solid black
+        }
+
+
+
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/homepage}">Study overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"  th:href="@{/coursesOverview}">Courses overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/studentPaths}">Student paths</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About project</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="content">
+        <div id="side-menu">
+            <form id="select-form" action="#" >
+                <div class="form-group">
+                    <label for="select-faculty">Select faculty</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
+                        <option selected>Fakulty</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <label for="select-study-program">Select study program</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-study-program">
+                        <option selected>Fakulty</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="select-academic-year">Select academic year</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-academic-year">
+                        <option selected>Fakulty</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="select-comparision">Select comparison dataset</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-comparision">
+                        <option selected>Fakulty</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <br>
+                <input id="show-data" class="btn btn-primary" type="submit" name="submit" value="Show data">
+                <br/>
+            </form>
+            <div id="student-data">
+                <div id="number-of-students">
+                    Number of students
+                </div>
+                <div id="pass-students-winter">
+                    Pass students winter
+                </div>
+                <div id="fail-students-winter">
+                    Fail students winter
+                </div>
+                <div id="pass-students-summer">
+                    Pass students summer
+                </div>
+                <div id="fail-students-summer">
+                    Fail students summer
+                </div>
+                <div id="fail-students-in-total">
+                    Fail students in total
+                </div>
+                <br/>
+
+            </div>
+
+        </div>
+        <div id="graphs">
+            <div id="exam-results">
+                <h4>Course exam results</h4>
+
+            </div>
+            <div id="number-of-attemps">
+                <h4>Course exam number of attempts</h4>
+
+
+
+            </div>
+            <div id="pass-fail-ratio">
+                <h4>Course pass/fail student ratio</h4>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+<script>
+
+</script>
+</body>
+</html>

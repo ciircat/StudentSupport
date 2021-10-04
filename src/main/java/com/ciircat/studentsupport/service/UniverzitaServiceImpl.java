@@ -43,4 +43,9 @@ public class UniverzitaServiceImpl implements UniverzitaServiceInterface{
     public Univerzita findUniverzitaById(Long id) {
         return null;
     }
+
+    @Override
+    public Univerzita findUniverzitaByUniverzitniIdentifikacniKod(String kod) {
+        return this.univerzitaRepository.findUniverzitaByUniverzitniIdentifikacniKod(kod);
+    }
 }
