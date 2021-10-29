@@ -38,11 +38,16 @@
         top: 2vh;
         left: 45vw;
     }
+    #flash-message-container{
+        text-align: center;
+    }
 </style>
 <body>
 <button class="btn btn-secondary" id="login-button">Přihlásit se </button>
 <button class="btn btn-secondary" id="register-button">Registrovat se </button>
-<H1 th:text="${message}"></H1>
+<div id="flash-message-container">
+<H1 id="flash-message" th:text="${message}"></H1>
+</div>
 <form th:action="@{/login}" id="login-form" method="post">
     <div class="form-group">
         <label for="username">Uživatelké jméno</label>

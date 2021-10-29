@@ -22,10 +22,11 @@
             flex-grow:10;
         }
         #side-menu{
+      margin-left: 10px;
 
 
 
-        }
+    }
 
         #number-of-students{
             background-color: greenyellow;
@@ -92,6 +93,7 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
     </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -128,96 +130,136 @@
     <div id="content">
         <div id="side-menu">
             <form id="select-form" action="#" >
-                <div class="form-group">
-                    <label for="select-faculty">Select faculty</label>
-                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
-                        <option selected>Fakulty</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <br/>
-                <div class="form-group">
-                    <label for="select-study-program">Select study program</label>
-                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-study-program">
-                        <option selected>Fakulty</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <br>
-                <div class="form-group">
-                    <label for="select-academic-year">Select academic year</label>
-                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-academic-year">
-                        <option selected>Fakulty</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <br>
-                <div class="form-group">
-                    <label for="select-comparision">Select comparison dataset</label>
-                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-comparision">
-                        <option selected>Fakulty</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                </div>
-                <br>
-                <input id="show-data" class="btn btn-primary" type="submit" name="submit" value="Show data">
-                <br/>
+              <div class="form-group">
+                <label for="select-faculty">Select faculty</label>
+                <select th:field="*{fakulty}" class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
+                  <option value="Fakulty"selected>Fakulty</option>
+                  <option th:each="i : ${fakulty}" th:value="${i.getNazevFakulty()}" th:text="${i.getNazevFakulty()}">
+                  </option>
+                </select>
+              </div>
+              <br/>
+              <div class="form-group">
+                <label for="select-study-program">Select study program</label>
+                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-study-program">
+                  <option selected>Studijní programy</option>
+                  
+                </select>
+              </div>
+              <br>
+              <div class="form-group">
+                <label for="select-academic-year">Select academic year</label>
+                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-academic-year">
+                  <option selected>Fakulty</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+              <br>
+              <div class="form-group">
+                <label for="select-comparision">Select comparison dataset</label>
+                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-comparision">
+                  <option selected>Fakulty</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+              </div>
+              <br>
+              <input id="show-data" class="btn btn-primary" type="submit" name="submit" value="Show data">
+              <br/>
             </form>
             <div id="student-data">
-                <div id="number-of-students">
+                  <div id="number-of-students">
                     Number of students
-                </div>
-                <div id="pass-students-winter">
+                  </div>
+                  <div id="pass-students-winter">
                     Pass students winter
-                </div>
-                <div id="fail-students-winter">
+                  </div>
+                  <div id="fail-students-winter">
                     Fail students winter
-                </div>
-                <div id="pass-students-summer">
+                  </div>
+                  <div id="pass-students-summer">
                     Pass students summer
-                </div>
-                <div id="fail-students-summer">
+                  </div>
+                  <div id="fail-students-summer">
                     Fail students summer
-                </div>
-                <div id="fail-students-in-total">
+                  </div>
+                  <div id="fail-students-in-total">
                     Fail students in total
-                </div>
-                <br/>
-
+                  </div>
+              <br/>
+              <div id="intervention-start">Intervention credit interval start</div>
+              <div id="intervention-stop">Intervention credit interval stop</div>
             </div>
-
-        </div>
+          </div>
         <div id="graphs">
             <div id="exam-results">
                 <h4>Course exam results</h4>
-
             </div>
             <div id="number-of-attemps">
                 <h4>Course exam number of attempts</h4>
-
-
-
             </div>
             <div id="pass-fail-ratio">
                 <h4>Course pass/fail student ratio</h4>
-
-
             </div>
-
         </div>
 
     </div>
 
-
+</div>
 <script>
+     let studyPrograms = [];
+
+let clearStudyProgramOptions = () =>{
+  let options = document.getElementById('select-study-program');
+  var i, L = options.options.length - 1;
+for(i = L; i >= 0; i--) {
+    options.remove(i);
+}
+}
+
+let updateSideMenuPrograms = () =>{
+  clearStudyProgramOptions();
+  let options = document.getElementById('select-study-program');
+  studyPrograms.forEach((program) =>{
+    
+    options.add(
+  new Option(program, program, false));
+
+  }
+
+);
+}
+
+let showDataClicked = (event)=>{
+  event.preventDefault();
+  axios.get("http://localhost:8080/hello-world").then((response) =>{console.log(response)});
+  console.log("KOKOTEEEEEE");
+}
+
+let selectFakultyChanged = (event) =>{
+    console.log("fokume")
+  axios.get("http://localhost:8080/programs/"+event.target.value).then((response) =>{
+    studyPrograms = [];
+    data = response.data;
+    let index = 0;
+    data.forEach((program) => {
+      studyPrograms[index] = program;
+      index++;
+    })
+    updateSideMenuPrograms();
+  });
+}
+let showData = document.getElementById('show-data');
+showData.addEventListener('click', showDataClicked);
+
+
+
+
+let selectFakulty = document.getElementById('select-faculty');
+selectFakulty.addEventListener('change', selectFakultyChanged)
 
 </script>
 </body>

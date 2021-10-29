@@ -17,5 +17,13 @@ public class IndexController {
         return "index";
     }
 
+    @RequestMapping({"/loginfailed"})
+    public String getFailedLogin(Model model) {
+        UserCommand userCommand = new UserCommand();
+        model.addAttribute("uzivatelRegistrace", userCommand);
+        model.addAttribute("message", "Spatně zadané uživatelské jméno a heslo");
+        return "index";
+    }
+
 
 }
