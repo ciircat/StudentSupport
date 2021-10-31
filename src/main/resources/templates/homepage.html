@@ -317,20 +317,23 @@
                   ]
                 },
                 options: {
-                  scales: {
-                    y: {
-                      gridLines: {
-                        circular: true
-                      },
-                      beginAtZero: true
-                    },
-                    x: {
-                      gridLines: {
-                        circular: true
-                      }
-                    }
-                  }
-                }
+      scales: {
+        y: {
+          ticks: {
+            mirror: true
+          },
+          grid : {
+            display : false
+          },
+          beginAtZero: true
+        },
+        x : {
+          grid : {
+            display : true,
+          },
+        }
+      }
+    }
               };
               myChart.destroy();
 
