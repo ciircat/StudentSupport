@@ -22,7 +22,6 @@
             flex-grow:10;
         }
         #side-menu{
-          margin-left: 10px;
 
 
 
@@ -134,10 +133,11 @@
             <form id="select-form" action="#" >
                 <div class="form-group">
                     <label for="select-faculty">Select faculty</label>
-                    <select th:field="*{fakulty}" class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
-                      <option value="Fakulty"selected>Fakulty</option>
-                      <option th:each="i : ${fakulty}" th:value="${i.getNazevFakulty()}" th:text="${i.getNazevFakulty()}">
-                      </option>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
+                        <option selected>Fakulty</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
                     </select>
                 </div>
                 <br/>
@@ -174,7 +174,28 @@
                 <input id="show-data" class="btn btn-primary" type="submit" name="submit" value="Show data">
                 <br/>
             </form>
-            
+            <div id="student-data">
+                <div id="number-of-students">
+                    Number of students
+                </div>
+                <div id="pass-students-winter">
+                    Pass students winter
+                </div>
+                <div id="fail-students-winter">
+                    Fail students winter
+                </div>
+                <div id="pass-students-summer">
+                    Pass students summer
+                </div>
+                <div id="fail-students-summer">
+                    Fail students summer
+                </div>
+                <div id="fail-students-in-total">
+                    Fail students in total
+                </div>
+                <br/>
+
+            </div>
 
         </div>
         <div id="graphs">
@@ -192,8 +213,8 @@
             </div>
 
         </div>
+        </div>
     </div>
-</div>
 
 
 <script>

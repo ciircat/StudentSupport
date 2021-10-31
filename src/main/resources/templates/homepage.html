@@ -1,328 +1,506 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="www.thymeleaf.org">
-  <head>
-    <style>
-      *{
-        box-sizing: border-box;
-      }
+<head>
+  <style>
+    *{
+      box-sizing: border-box;
+    }
 
-      span{
-        border-width: 50px;
-        border-color: black;
-      }
-      #container{
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
+    span{
+      border-width: 50px;
+      border-color: black;
+    }
+    #container{
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
 
-      }
-      #content{
-        display: flex;
-        flex-direction: row;
-        flex-grow:10;
-      }
-      #side-menu{
-        margin-left: 10px;
-
-
-
-      }
-
-      #number-of-students{
-        background-color: greenyellow;
-        height: 5vh;
-        width: 15vw;
-      }
-      #pass-students-winter{
-        background-color: green;
-        height: 5vh;
-        width: 15vw;
-      }
-      #pass-students-summer{
-        background-color: green;
-        height: 5vh;
-        width: 15vw;
-      }
-
-      #fail-students-summer{
-        background-color: orangered;
-        height: 5vh;
-        width: 15vw;
-      }
-      #fail-students-winter{
-        background-color: orangered;
-        height: 5vh;
-        width: 15vw;
-      }
-      #fail-students-in-total{
-        background-color: orangered;
-        height: 5vh;
-        width: 15vw;
-      }
-      #show-data{
-        margin-left: 4vw;
-      }
-
-      #student-data{
-        margin-top: 5vh;
-      }
-      #graphs{
-        display: flex;
-        flex-direction: column;
-        flex-grow: 10;
-        position: relative;
-
-        margin-left: 10vw;
-      }
-
-
-      #line-graph{
-        height: 60%;
-        position: relative;
-        background-color: orange;
-
-      }
-      #bar-graph{
-        height: 40%;
-
-      }
-      #myChart{
-        width: 100%;
-        height: 100%;
-      }
-      #myBarChart{
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-      }
+    }
+    #content{
+      display: flex;
+      flex-direction: row;
+      flex-grow:10;
+    }
+    #side-menu{
+      margin-left: 10px;
 
 
 
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-    </script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+    }
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    #number-of-students{
+      background-color: greenyellow;
+      height: 5vh;
+      width: 15vw;
+    }
+    #pass-students-winter{
+      background-color: green;
+      height: 5vh;
+      width: 15vw;
+    }
+    #pass-students-summer{
+      background-color: green;
+      height: 5vh;
+      width: 15vw;
+    }
 
-    <meta charset="UTF-8">
-    <title>Title</title>
-  </head>
-  <body>
-    <div id="container">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#"></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Study overview</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" th:href="@{/coursesOverview}">Courses overview</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" th:href="@{/studentPaths}">Student paths</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">About project</a>
-              </li>
-            </ul>
-            <form method="get" action="/logout">
-              <button type="submit" class="btn btn-primary">Odhlásit se</button>
-            </form>
-          </div>
-        </div>
-      </nav>
-      <div id="content">
-        <div id="side-menu">
-          <form id="select-form" action="#" >
-            <div class="form-group">
-              <label for="select-faculty">Select faculty</label>
-              <select th:field="*{fakulty}" class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
-                <option value="Fakulty"selected>Fakulty</option>
-                <option th:each="i : ${fakulty}" th:value="${i.getNazevFakulty()}" th:text="${i.getNazevFakulty()}">
-                </option>
-              </select>
-            </div>
-            <br/>
-            <div class="form-group">
-              <label for="select-study-program">Select study program</label>
-              <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-study-program">
-                <option selected>Studijní programy</option>
-                
-              </select>
-            </div>
-            <br>
-            <div class="form-group">
-              <label for="select-academic-year">Select academic year</label>
-              <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-academic-year">
-                <option selected>Fakulty</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-            </div>
-            <br>
-            <div class="form-group">
-              <label for="select-comparision">Select comparison dataset</label>
-              <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-comparision">
-                <option selected>Fakulty</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-            </div>
-            <br>
-            <input id="show-data" class="btn btn-primary" type="submit" name="submit" value="Show data">
-            <br/>
-          </form>
-          <div id="student-data">
-                <div id="number-of-students">
-                  Number of students
-                </div>
-                <div id="pass-students-winter">
-                  Pass students winter
-                </div>
-                <div id="fail-students-winter">
-                  Fail students winter
-                </div>
-                <div id="pass-students-summer">
-                  Pass students summer
-                </div>
-                <div id="fail-students-summer">
-                  Fail students summer
-                </div>
-                <div id="fail-students-in-total">
-                  Fail students in total
-                </div>
-            <br/>
-            <div id="intervention-start">Intervention credit interval start</div>
-            <div id="intervention-stop">Intervention credit interval stop</div>
-          </div>
-        </div>
-        <div id="graphs">
-          <div id="line-graph">
-            <canvas id="myChart"></canvas>
-          </div>
-          <div id="bar-graph">
-          </div>
-        </div>
+    #fail-students-summer{
+      background-color: orangered;
+      height: 5vh;
+      width: 15vw;
+    }
+    #fail-students-winter{
+      background-color: orangered;
+      height: 5vh;
+      width: 15vw;
+    }
+    #fail-students-in-total{
+      background-color: orangered;
+      height: 5vh;
+      width: 15vw;
+    }
+    #show-data{
+      margin-left: 4vw;
+    }
+
+    #student-data{
+      margin-top: 5vh;
+    }
+    #graphs{
+      display: flex;
+      flex-direction: column;
+      flex-grow: 10;
+      position: relative;
+
+      margin-left: 10vw;
+    }
+
+
+    #line-graph{
+      height: 60%;
+      position: relative;
+
+
+    }
+    #bar-graph{
+      height: 40%;
+
+    }
+    #myChart{
+      width: 100%;
+      height: 100%;
+    }
+    #volume{
+     
+    }
+    #myBarChart{
+      width: 100%;
+      height: 100%;
+      /*display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;*/
+    }
+
+
+
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+  </script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Study overview</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/coursesOverview}">Courses overview</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/studentPaths}">Student paths</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About project</a>
+          </li>
+        </ul>
+        <form method="get" action="/logout">
+          <button type="submit" class="btn btn-primary">Odhlásit se</button>
+        </form>
       </div>
     </div>
-    <script>
-      let studyPrograms = [];
+  </nav>
+  <div id="content">
+    <div id="side-menu">
+      <form id="select-form" action="#" >
+        <div class="form-group">
+          <label for="select-faculty">Select faculty</label>
+          <select th:field="*{fakulty}" class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
+            <option value="Fakulty"selected>Fakulty</option>
+            <option th:each="i : ${fakulty}" th:value="${i.getNazevFakulty()}" th:text="${i.getNazevFakulty()}">
+            </option>
+          </select>
+        </div>
+        <br/>
+        <div class="form-group">
+          <label for="select-study-program">Select study program</label>
+          <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-study-program">
+            <option selected>Studijní programy</option>
 
-      let clearStudyProgramOptions = () =>{
-        let options = document.getElementById('select-study-program');
-        var i, L = options.options.length - 1;
-      for(i = L; i >= 0; i--) {
-          options.remove(i);
-      }
-      }
+          </select>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="select-academic-year">Select academic year</label>
+          <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-academic-year">
+            <option selected>Academic years</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+          </select>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="select-comparision">Select comparison dataset</label>
+          <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-comparision">
+            <option selected>Fakulty</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+        <br>
+        <input id="show-data" class="btn btn-primary" type="submit" name="submit" value="Show data">
+        <br/>
+      </form>
+      <div id="student-data">
+        <div id="number-of-students">
+          Number of students
+        </div>
+        <div id="pass-students-winter">
+          Pass students winter
+        </div>
+        <div id="fail-students-winter">
+          Fail students winter
+        </div>
+        <div id="pass-students-summer">
+          Pass students summer
+        </div>
+        <div id="fail-students-summer">
+          Fail students summer
+        </div>
+        <div id="fail-students-in-total">
+          Fail students in total
+        </div>
+        <br/>
+        <div id="intervention-start">Intervention credit interval start</div>
+        <div id="intervention-stop">Intervention credit interval stop</div>
+      </div>
+    </div>
+    <div id="graphs">
+      <div id="line-graph">
+        <canvas id="myChart"></canvas>
+      </div>
+      <input type="range" id="volume" name="volume" min="0" step=1 max=51 />
+      <div id="bar-graph">
+        <canvas id="myBarChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  //<input type="range" id="volume" name="volume" min="0" step=1 max=51 oninput="drawGraph(this.value)" onchange="drawGraph(this.value)"/>
+  let numberOfStudents = document.getElementById('number-of-students');
+  let passStudentsWinter = document.getElementById('pass-students-winter');
+  let failStudentsWinter = document.getElementById('fail-students-winter');
+  let passStudentsSummer = document.getElementById('pass-students-summer');
+  let failStudentsSummer = document.getElementById('fail-students-summer');
+  let failStudentsInTotal = document.getElementById('fail-students-in-total');
+  let interventionStart = document.getElementById('intervention-start');
+  let interventionStop = document.getElementById('intervention-stop');
 
-      let updateSideMenuPrograms = () =>{
-        clearStudyProgramOptions();
-        let options = document.getElementById('select-study-program');
-        studyPrograms.forEach((program) =>{
-          
-          options.add(
-        new Option(program, program, false));
+  let studyPrograms = [];
+  let sideMenuState = {
+    faculty: '',
+    studyProgram: '',
+    academicYear: ''
+  };
 
-        }
-      
-      );
-      }
+  let selectStudyProgramChanged = (event)=>{
+    sideMenuState.studyProgram = event.target.value;
+  }
 
-      let showDataClicked = (event)=>{
-        event.preventDefault();
-        axios.get("http://localhost:8080/hello-world").then((response) =>{console.log(response)});
-        console.log("KOKOTEEEEEE");
-      }
-
-      let selectFakultyChanged = (event) =>{
-        axios.get("http://localhost:8080/programs/"+event.target.value).then((response) =>{
-          studyPrograms = [];
-          data = response.data;
-          let index = 0;
-          data.forEach((program) => {
-            studyPrograms[index] = program;
-            index++;
-          })
-          updateSideMenuPrograms();
-        });
-      }
-      let showData = document.getElementById('show-data');
-      showData.addEventListener('click', showDataClicked);
+  let selectAcademicYearChanged = (event)=>{
+    sideMenuState.academicYear = event.target.value;
+  }
 
 
+  let selectStudyProgram = document.getElementById('select-study-program');
+  let selectAcademicYear = document.getElementById('select-academic-year');
+  selectStudyProgram.addEventListener('change', selectStudyProgramChanged);
+  selectAcademicYear.addEventListener('change', selectAcademicYearChanged);
 
+  let clearStudyProgramOptions = () =>{
+    let options = document.getElementById('select-study-program');
+    var i, L = options.options.length - 1;
+    for(i = L; i > 0; i--) {
+      options.remove(i);
+    }
+  }
 
-      let selectFakulty = document.getElementById('select-faculty');
-      selectFakulty.addEventListener('change', selectFakultyChanged)
+  let updateSideMenuPrograms = () =>{
+    clearStudyProgramOptions();
+    let options = document.getElementById('select-study-program');
+    studyPrograms.forEach((program) =>{
 
-      let div = document.getElementById('line-graph').offsetWidth;
+              options.add(
+                      new Option(program, program, false));
 
-      let ctx = document.getElementById('myChart').getContext('2d');
-      let canvas = document.getElementById('myChart');
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      console.log(myChart);
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['week1','week2','week3','week4','week5','week6','week7','week8','week9','week10','week11','week12','week13','week14', ],
-          datasets: [{
-            label: '# of Credits',
-            data: [0,0,2,4,6,8,10,12,14,16,18,20,22,24],
-
-            borderColor: [
-              'rgba(255, 99, 132, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
             }
+
+    );
+  }
+
+  let showDataClicked = (event)=>{
+    event.preventDefault();
+    console.log(sideMenuState);
+    axios.post("http://159.89.100.31:8080/dummy-data",sideMenuState)
+            .then((response) =>{
+              numberOfStudents.innerHTML = 'Number of Students ' + response.data.numberOfStudents;
+              passStudentsWinter.innerHTML = 'Pass Students Winter ' + response.data.passStudentsWinter;
+              failStudentsWinter.innerHTML = 'Fail Students Winter ' + response.data.failStudentsWinter;
+              passStudentsSummer.innerHTML = 'Pass Students Summer ' + response.data.passStudentsSummer;
+              failStudentsSummer.innerHTML = 'Fail Students Summer ' + response.data.failStudentsSummer;
+              failStudentsInTotal.innerHTML = 'Fail Students in Total ' + response.data.failStudentsTotal;
+              interventionStart.innerHTML = 'Intervention credit interval start ' + response.data.interventionCreditIntervalStart;
+              interventionStop.innerHTML = 'Intervention credit interval stop ' + response.data.interventionCreditIntervalStop;
+              dataToDisplayPassed = response.data.dataPassed;
+              dataToDisplayFailed = response.data.dataFailed;
+              newLineGraphData = {
+                type: 'line',
+                data: {
+                  labels: ['1','2','3','4','5','6','7','8','9','10', '11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','37','39','40','41','42','43','44','45','46','47','48','49','50','51','52'],
+                  //labels: ['week1','week2','week3','week4','week5','week6','week7','week8','week9','week10', 'week11','week12','week13','week14','week15','week16','week17','week18','week19','week20','week21','week22','week23','week24','week25','week26','week27','week28','week29','week30','week31','week32','week33','week34','week35','week36','week37','week38','week39','week40','week41','week42','week43','week44','week45','week46','week47','week48','week49','week50','week51','week52'],
+                  datasets: [{
+                    label: 'average # of Credits of students that passed',
+                    data: dataToDisplayPassed,
+
+                    borderColor: [
+                      'rgba(0, 255, 132, 1)'
+                    ],
+                    borderWidth: 1
+                  },{
+                    label: 'average # of Credits of students that failed',
+                    data: dataToDisplayFailed,
+
+                    borderColor: [
+                      'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                  }
+                  ]
+                },
+                options: {
+                  scales: {
+                    y: {
+                      gridLines: {
+                        circular: true
+                      },
+                      beginAtZero: true
+                    },
+                    x: {
+                      gridLines: {
+                        circular: true
+                      }
+                    }
+                  }
+                }
+              };
+              myChart.destroy();
+
+              myChart = new Chart(ctx, newLineGraphData);
+              console.log('mel bych tu bejt')
+
+
+
+            });
+  }
+
+
+
+
+
+
+  let selectFakultyChanged = (event) =>{
+    sideMenuState.faculty = event.target.value;
+    axios.get("http://159.89.100.31:8080/programs/"+event.target.value).then((response) =>{
+      studyPrograms = [];
+      data = response.data;
+      let index = 0;
+      data.forEach((program) => {
+        studyPrograms[index] = program;
+        index++;
+      })
+      updateSideMenuPrograms();
+    });
+  }
+  let showData = document.getElementById('show-data');
+  showData.addEventListener('click', showDataClicked);
+
+
+
+
+  let selectFakulty = document.getElementById('select-faculty');
+  selectFakulty.addEventListener('change', selectFakultyChanged)
+
+  let div = document.getElementById('line-graph').offsetWidth;
+
+
+
+  let ctx = document.getElementById('myChart').getContext('2d');
+  let canvas = document.getElementById('myChart');
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  console.log(myChart);
+  lineGraphData = {
+    type: 'line',
+    data: {
+      labels: ['1','2','3','4','5','6','7','8','9','10', '11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','37','39','40','41','42','43','44','45','46','47','48','49','50','51','52'],
+      //labels: ['week1','week2','week3','week4','week5','week6','week7','week8','week9','week10', 'week11','week12','week13','week14','week15','week16','week17','week18','week19','week20','week21','week22','week23','week24','week25','week26','week27','week28','week29','week30','week31','week32','week33','week34','week35','week36','week37','week38','week39','week40','week41','week42','week43','week44','week45','week46','week47','week48','week49','week50','week51','week52'],
+      datasets: [{
+        data: [],
+
+        borderColor: [
+          'rgba(255, 99, 132, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          ticks: {
+            mirror: true
+          },
+          grid : {
+            display : false
+          },
+          beginAtZero: true
+        },
+        x : {
+          grid : {
+            display : true,
+          },
+        }
+      }
+    }
+  };
+  var myChart = new Chart(ctx, lineGraphData);
+  let ctxBar = document.getElementById('myBarChart').getContext('2d');
+
+  barData = {
+    labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
+      '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47',
+      '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70', '71'],
+    datasets: [
+      {
+        label: 'probability of failing',
+        data: [71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100,
+          71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100,
+          71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100],
+        backgroundColor: 'red',
+      },
+      {
+        label: 'probability of passing',
+        data: [29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0,
+          29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0,
+          29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0],
+        backgroundColor: 'green',
+      }
+    ],
+  }
+
+  let canvas2 = document.getElementById('myBarChart');
+  canvas2.style.width = '100%';
+  canvas2.style.height = '100%';
+  canvas2.width = canvas2.offsetWidth;
+  canvas2.height = canvas2.offsetHeight;
+
+  var barChart = new Chart(document.getElementById('myBarChart').getContext('2d'), {
+    type: 'bar',
+    data : barData,
+    options: {
+      scales: {
+        x: {
+          stacked: true,
+        },
+        y: {
+          stacked: true,
+          ticks: {
+            beginAtZero: true,
+            min: 0,
+            max: 100,
+            callback:
+                    function (value) {
+                      return value + "%"
+                    }
           }
         }
-      });
-      let ctxBar = document.getElementById('myBarChart').getContext('2d');
-      console.log(myChart);
-      var myChart = new Chart(ctxBar, {
-        type: 'bar',
-        data: {
-          labels: ['week1','week2','week3','week4','week5','week6','week7','week8','week9','week10','week11','week12','week13','week14', ],
-          datasets: [{
-            label: '# of Credits',
-            data: [0,0,2,4,6,8,10,12,14,16,18,20,22,24],
-
-            borderColor: [
-              'rgba(255, 99, 132, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
+      },
+    }
+  })
+  function drawGraph(value) {
+    barChart.destroy()
+    barChart = new Chart(document.getElementById('myBarChart').getContext('2d'), {
+      type: 'bar',
+      data : barData[value],
+      options: {
+        scales: {
+          x: {
+            stacked: true,
+            gridLines: {
+              display: true,
+              drawTicks: true,
+            }
+          },
+          y: {
+            stacked: true,
+            gridLines: {
+              display: false,
+              drawTicks: true,
+            },
+            ticks: {
+              beginAtZero: true,
+              min: 0,
+              max: 100,
+              callback:
+                      function (value) {
+                        return value + "%"
+                      }
             }
           }
-        }
-      });
-    </script>
-  </body>
+        },
+      }
+    })
+  }
+</script>
+</body>
 </html>
