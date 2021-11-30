@@ -20,5 +20,27 @@ public class Univerzita extends BaseEntity{
     @OneToMany(mappedBy = "univerzita")
     private List<Fakulta> fakulty;
 
+    public String getNazevUniverzity() {
+        return nazevUniverzity;
+    }
 
+    public void setNazevUniverzity(String nazevUniverzity) {
+        this.nazevUniverzity = nazevUniverzity;
+    }
+
+    public String getUniverzitniIdentifikacniKod() {
+        return univerzitniIdentifikacniKod;
+    }
+
+    public void setUniverzitniIdentifikacniKod(String univerzitniIdentifikacniKod) {
+        this.univerzitniIdentifikacniKod = univerzitniIdentifikacniKod;
+    }
+
+    public List<Fakulta> getFakulty() {
+        return fakulty;
+    }
+
+    public void setFakulty(List<Fakulta> fakulty) {
+        this.fakulty = fakulty;
+    }
 }

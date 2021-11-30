@@ -16,4 +16,12 @@ public class ProgramService {
     public List<Program> getProgramsByFaculty(Fakulta fakulta){
         return this.programRepository.findProgramsByFakulta(fakulta);
     }
+
+    public Program saveProgram(Program program){
+        return this.programRepository.save(program);
+    }
+
+    public Program findProgramByKodProgramu(String kod){
+        return this.programRepository.findProgramsByKodProgramu(kod);
+    }
 }

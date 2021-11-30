@@ -48,6 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
         http.csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/migrate").permitAll()
+                .antMatchers("/pridat").permitAll()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user/*").hasAnyRole("ADMIN","USER")
                 .antMatchers("/").permitAll()

@@ -4,13 +4,23 @@ public class SideMenuState {
     private String faculty;
     private String studyProgram;
     private String academicYear;
+    private String value;
 
     public SideMenuState(){}
 
-    public SideMenuState(String faculty, String studyProgram, String academicYear) {
+    public SideMenuState(String faculty, String studyProgram, String academicYear, String value) {
+        this.value = value;
         this.faculty = faculty;
         this.studyProgram = studyProgram;
         this.academicYear = academicYear;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getFaculty() {

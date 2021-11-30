@@ -15,4 +15,8 @@ public class FakultaService {
     public Fakulta getFakultaByNazevFakulty(String nazevFakulty){
         return this.fakultaRepository.findFakultaByNazevFakulty(nazevFakulty);
     }
+
+    public Fakulta saveFakulta(Fakulta fakulta){
+        return this.fakultaRepository.save(fakulta);
+    }
 }

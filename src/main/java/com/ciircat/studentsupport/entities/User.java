@@ -3,7 +3,7 @@ package com.ciircat.studentsupport.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "app_user")
 public class User extends BaseEntity{
     @Column(name = "username")
     private String username;

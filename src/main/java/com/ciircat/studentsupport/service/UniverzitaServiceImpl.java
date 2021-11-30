@@ -3,9 +3,10 @@ package com.ciircat.studentsupport.service;
 import com.ciircat.studentsupport.entities.Univerzita;
 import com.ciircat.studentsupport.repository.UniverzitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
-
+@Service
 public class UniverzitaServiceImpl implements UniverzitaServiceInterface{
 
     private UniverzitaRepository univerzitaRepository;
@@ -21,7 +22,7 @@ public class UniverzitaServiceImpl implements UniverzitaServiceInterface{
 
     @Override
     public Univerzita save(Univerzita univerzita) {
-        return null;
+        return this.univerzitaRepository.save(univerzita);
     }
 
     @Override

@@ -21,4 +21,44 @@ public class OborSpecializace extends BaseEntity{
 
     @OneToOne(mappedBy = "oborSpecializace")
     private Studium studium;
+
+    public String getNazevOboruSpecializace() {
+        return nazevOboruSpecializace;
+    }
+
+    public void setNazevOboruSpecializace(String nazevOboruSpecializace) {
+        this.nazevOboruSpecializace = nazevOboruSpecializace;
+    }
+
+    public String getKodOboruSpecializace() {
+        return kodOboruSpecializace;
+    }
+
+    public void setKodOboruSpecializace(String kodOboruSpecializace) {
+        this.kodOboruSpecializace = kodOboruSpecializace;
+    }
+
+    public Program getProgram() {
+        return program;
+    }
+
+    public void setProgram(Program program) {
+        this.program = program;
+    }
+
+    public Set<Predmet> getPredmetyOboruSpecializace() {
+        return predmetyOboruSpecializace;
+    }
+
+    public void setPredmetyOboruSpecializace(Set<Predmet> predmetyOboruSpecializace) {
+        this.predmetyOboruSpecializace = predmetyOboruSpecializace;
+    }
+
+    public Studium getStudium() {
+        return studium;
+    }
+
+    public void setStudium(Studium studium) {
+        this.studium = studium;
+    }
 }
