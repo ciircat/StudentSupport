@@ -44,13 +44,14 @@ public class SideMenuController {
         String studyProgram = sideMenuState.getStudyProgram();
         String academicYear = sideMenuState.getAcademicYear();
         DataLineGraph dataLineGraph = this.dataLineGraphService.findDataLineGraphByNazevFakultyAndNazevProgramuAndAkademickyRok(faculty,studyProgram,academicYear);
-
+        
         DummyData toReturn = new DummyData();
+        toReturn.setNumberOfStudents(407);
         toReturn.setPassStudentsSummer(100);
         toReturn.setFailStudentsSummer(1);
         toReturn.setPassStudentsWinter(99);
         toReturn.setFailStudentsWinter(0);
-        toReturn.setFailStudentsTotal(1);
+        toReturn.setFailStudentsTotal(78);
         toReturn.setInterventionCreditIntervalStart(10);
         toReturn.setInterventionCreditIntervalStop(50);
         toReturn.setDataFailed(dataLineGraph.getAverageFailData());
@@ -59,13 +60,37 @@ public class SideMenuController {
     }
 
     @PostMapping("bar-graph-data")
-    public List<Integer> getBarDataGraph(@RequestBody SideMenuState sideMenuState){
+    public List<List<Integer>> getBarDataGraph(@RequestBody SideMenuState sideMenuState){
         String faculty = sideMenuState.getFaculty();
         String studyProgram = sideMenuState.getStudyProgram();
         String academicYear = sideMenuState.getAcademicYear();
         String value = sideMenuState.getValue();
-        var toReturn = this.dataBarGraphService.getDataBarGraphByNazevfakultyAndNazevProgramuAndAkademickyRok(faculty,studyProgram,academicYear,value);
-        return toReturn.getPravdepodobnostPass();
+        var x = this.dataBarGraphService.getDataBarGraphByNazevfakultyAndNazevProgramuAndAkademickyRok(faculty,studyProgram,academicYear,value);
+        List<List<Integer>> toReturn = new ArrayList<>();
+        List<Integer> passBeforeNormalization = x.getPravdepodobnostPass();
+        List<Integer> failBeforerNormalization = new ArrayList<>();
+        List<Integer> passAfterNormalization = new ArrayList<>();
+        List<Integer> failAfterNormalization = new ArrayList<>();
+        for (int i : passBeforeNormalization){
+            if (i == -1){
+                failBeforerNormalization.add(-1);
+            }else {
+                failBeforerNormalization.add(100-i);
+            }
+        }
+        for (int i = 0; i < passBeforeNormalization.size(); i++){
+            if ((passBeforeNormalization.get(i)) == -1 && (failBeforerNormalization.get(i) == -1)){
+                passAfterNormalization.add(0);
+                failAfterNormalization.add(0);
+            }else {
+                passAfterNormalization.add(passBeforeNormalization.get(i));
+                failAfterNormalization.add(failBeforerNormalization.get(i));
+            }
+
+        }
+        toReturn.add(passAfterNormalization);
+        toReturn.add(failAfterNormalization);
+        return toReturn;
 
     }
 

@@ -17,4 +17,8 @@ public interface StudiumRepository extends JpaRepository<Studium, Long> {
     @Query(value = "SELECT s from Studium s WHERE s.vysledekPrvnihoRokuStudia = ?1 and s.rokMaturitniZkousky=?2")
     List<Studium> findAllStudiumsByPassStatusAndAkademickyRok(String passStatus, String rok);
 
+
+
+
+
 }

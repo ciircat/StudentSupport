@@ -173,7 +173,7 @@
                 <input id="show-data" class="btn btn-primary" type="submit" name="submit" value="Show data">
                 <br/>
             </form>
-            
+
 
         </div>
         <div id="graphs">
@@ -196,6 +196,21 @@
 
 
 <script>
+
+    let labels_1 = [];
+    let data1_1 = [];
+    let data1_2 = [];
+    let data2_1 = [];
+    let data2_2 = [];
+    let data2_3 = [];
+    let data2_4 = [];
+    let data2_5 = [];
+    let data2_6 = [];
+    let data3_1 = [];
+    let data3_2 = [];
+    let data3_3 = [];
+    let data3_4 = [];
+
     let examBar = document.getElementById('examChart1').getContext('2d');
 
     let canvas = document.getElementById('examChart1');
@@ -208,23 +223,37 @@
     let myChart = new Chart(examBar, {
         type: 'bar',
         data : {
-            labels: ['whatever', 'whatever1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+            labels: labels_1,
             datasets: [
                 {
-                    label: 'red',
-                    data: [71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100,
-                        71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100,
-                        71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100],
-                    backgroundColor: 'red',
+                    label: 'A',
+                    data: data2_1,
+                    backgroundColor: 'green',
                 },
                 {
-                    label: 'green',
-                    data: [29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0,
-                        29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0,
-                        29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0],
-                    backgroundColor: 'green',
+                    label: 'B',
+                    data: data2_2,
+                    backgroundColor: 'blue',
+                },
+                {
+                    label: 'C',
+                    data: data2_3,
+                    backgroundColor: 'yellow',
+                },
+                {
+                    label: 'D',
+                    data: data2_4,
+                    backgroundColor: 'pink',
+                },
+                {
+                    label: 'E',
+                    data: data2_5,
+                    backgroundColor: 'orange',
+                },
+                {
+                    label: 'F',
+                    data: data2_6,
+                    backgroundColor: 'red',
                 }
             ],
         },
@@ -261,23 +290,28 @@
     let myChart2 = new Chart(examBar2, {
         type: 'bar',
         data : {
-            labels: ['whatever', 'whatever1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+            labels: labels_1,
             datasets: [
                 {
-                    label: 'red',
-                    data: [71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100,
-                        71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100,
-                        71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100],
+                    label: '0 pokusů',
+                    data: data3_1,
                     backgroundColor: 'red',
                 },
                 {
-                    label: 'green',
-                    data: [29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0,
-                        29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0,
-                        29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0],
+                    label: 'Jeden pokus',
+                    data: data3_2,
                     backgroundColor: 'green',
+                },
+                {
+                    label: '2 pokusy',
+                    data: data3_3,
+                    backgroundColor: 'yellow',
+                }
+                ,
+                {
+                    label: '3 pokusy',
+                    data: data3_4,
+                    backgroundColor: 'pink',
                 }
             ],
         },
@@ -315,22 +349,16 @@
     let myChart3 = new Chart(examBar3, {
         type: 'bar',
         data : {
-            labels: ['whatever', 'whatever1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-                '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+            labels: labels_1,
             datasets: [
                 {
-                    label: 'red',
-                    data: [71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100,
-                        71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100,
-                        71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100, 71, 90, 13, 85, 22, 30, 20, 100],
+                    label: 'fail ratio',
+                    data: data1_1,
                     backgroundColor: 'red',
                 },
                 {
-                    label: 'green',
-                    data: [29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0,
-                        29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0,
-                        29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0, 29, 10, 87, 15, 78, 70, 80, 0],
+                    label: 'pass ratio',
+                    data: data1_2,
                     backgroundColor: 'green',
                 }
             ],
@@ -339,6 +367,11 @@
             scales: {
                 x: {
                     stacked: true,
+                    ticks: {
+                        autoSkip: false,
+                        stepSize: 1,
+                        min: 0
+                    }
                 },
                 y: {
                     stacked: true,
@@ -405,8 +438,215 @@
         //console.log(sideMenuState);
         axios.post("http://localhost:8080/courses-overview-data",sideMenuState)
             .then((response) =>{
-                console.log(response)
-                console.log(sideMenuState);
+                console.log(response);
+
+                for(let index in response.data)
+                {
+
+                    let item = response.data[index]
+                    labels_1.push(item.nazev)
+                    data1_1.push(100 - item.passFailRatio)
+                    data1_2.push(item.passFailRatio)
+
+                    let itemA = item.procentoA;
+                    let itemB = item.procentoB;
+                    let itemC = item.procentoC;
+                    let itemD = item.procentoD;
+                    let itemE = item.procentoE;
+                    let itemF = item.procentoF;
+
+                    let inaccuracy = 100 - (itemA + itemB + itemC + itemD + itemE + itemF);
+
+                    if(item.procentoA >= item.procentoB && item.procentoA >= item.procentoC && item.procentoA >= item.procentoD
+                        && item.procentoA >= item.procentoE && item.procentoA >= item.procentoF)
+                        itemA = itemA + inaccuracy;
+                    else if(item.procentoB >= item.procentoA && item.procentoB >= item.procentoC && item.procentoB >= item.procentoD
+                        && item.procentoB >= item.procentoE && item.procentoB >= item.procentoF)
+                        itemB = itemB + inaccuracy;
+                    else if(item.procentoC >= item.procentoA && item.procentoC >= item.procentoB && item.procentoC >= item.procentoD
+                        && item.procentoC >= item.procentoE && item.procentoC >= item.procentoF)
+                        itemC = itemC + inaccuracy;
+                    else if(item.procentoD >= item.procentoA && item.procentoD >= item.procentoB && item.procentoD >= item.procentoC
+                        && item.procentoD >= item.procentoE && item.procentoD >= item.procentoF)
+                        itemD = itemD + inaccuracy;
+                    else if(item.procentoE >= item.procentoA && item.procentoE >= item.procentoB && item.procentoE >= item.procentoC
+                        && item.procentoE >= item.procentoD && item.procentoE >= item.procentoF)
+                        itemE = itemE + inaccuracy;
+                    else
+                        itemF = itemF + inaccuracy;
+
+                    data2_1.push(itemA)
+                    data2_2.push(itemB)
+                    data2_3.push(itemC)
+                    data2_4.push(itemD)
+                    data2_5.push(itemE)
+                    data2_6.push(itemF)
+
+                    let soucetPokusu = item.posledniUspesnyPokus0 + item.posledniUspesnyPokus1 + item.posledniUspesnyPokus2 + item.posledniUspesnyPokus3;
+
+                    let item2_A = item.posledniUspesnyPokus0 * 100 / soucetPokusu;
+                    let item2_B = item.posledniUspesnyPokus1 * 100 / soucetPokusu;
+                    let item2_C = item.posledniUspesnyPokus2 * 100 / soucetPokusu;
+                    let item2_D = item.posledniUspesnyPokus3 * 100 / soucetPokusu;
+
+                    data3_1.push(item2_A)
+                    data3_2.push(item2_B)
+                    data3_3.push(item2_C)
+                    data3_4.push(item2_D)
+                    myChart.destroy();
+                    myChart2.destroy();
+
+                    myChart = new Chart(examBar, {
+                        type: 'bar',
+                        data : {
+                            labels: labels_1,
+                            datasets: [
+                                {
+                                    label: 'A',
+                                    data: data2_1,
+                                    backgroundColor: 'green',
+                                },
+                                {
+                                    label: 'B',
+                                    data: data2_2,
+                                    backgroundColor: 'blue',
+                                },
+                                {
+                                    label: 'C',
+                                    data: data2_3,
+                                    backgroundColor: 'yellow',
+                                },
+                                {
+                                    label: 'D',
+                                    data: data2_4,
+                                    backgroundColor: 'pink',
+                                },
+                                {
+                                    label: 'E',
+                                    data: data2_5,
+                                    backgroundColor: 'orange',
+                                },
+                                {
+                                    label: 'F',
+                                    data: data2_6,
+                                    backgroundColor: 'red',
+                                }
+                            ],
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                    ticks: {
+                                        beginAtZero: true,
+                                        min: 0,
+                                        max: 100,
+                                        callback:
+                                            function (value) {
+                                                return value + "%"
+                                            }
+                                    }
+                                }
+                            },
+                        }
+                    });
+
+                    myChart2 = new Chart(examBar2, {
+                        type: 'bar',
+                        data : {
+                            labels: labels_1,
+                            datasets: [
+                                {
+                                    label: '0 pokusů',
+                                    data: data3_1,
+                                    backgroundColor: 'red',
+                                },
+                                {
+                                    label: 'Jeden pokus',
+                                    data: data3_2,
+                                    backgroundColor: 'green',
+                                },
+                                {
+                                    label: '2 pokusy',
+                                    data: data3_3,
+                                    backgroundColor: 'yellow',
+                                }
+                                ,
+                                {
+                                    label: '3 pokusy',
+                                    data: data3_4,
+                                    backgroundColor: 'pink',
+                                }
+                            ],
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                    ticks: {
+                                        beginAtZero: true,
+                                        min: 0,
+                                        max: 100,
+                                        callback:
+                                            function (value) {
+                                                return value + "%"
+                                            }
+                                    }
+                                }
+                            },
+                        }
+                    });
+
+                    myChart3.destroy();
+                    myChart3 = new Chart(examBar3, {
+                        type: 'bar',
+                        data : {
+                            labels: labels_1,
+                            datasets: [
+                                {
+                                    label: 'fail ratio',
+                                    data: data1_1,
+                                    backgroundColor: 'red',
+                                },
+                                {
+                                    label: 'pass ratio',
+                                    data: data1_2,
+                                    backgroundColor: 'green',
+                                }
+                            ],
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                    ticks: {
+                                        autoSkip: false,
+                                        stepSize: 1,
+                                        min: 0
+                                    }
+                                },
+                                y: {
+                                    stacked: true,
+                                    ticks: {
+                                        beginAtZero: true,
+                                        min: 0,
+                                        max: 100,
+                                        callback:
+                                            function (value) {
+                                                return value + "%"
+                                            }
+                                    }
+                                }
+                            },
+                        }
+                    });
+                }
             });
     }
 

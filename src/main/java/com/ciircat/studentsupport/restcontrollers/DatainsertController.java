@@ -386,6 +386,9 @@ public class DatainsertController {
           List<Studium> vsechnaStudiaDanehoRoku = this.studiumService.findAllStudiumsInGivenYear("2017");
         //List<Studium> vsechnaStudiaDanehoRoku = this.studiumService.findAllStudiumsByPassStatusAndAkademickyRok("Pass", "2017");
          for (Studium studium : vsechnaStudiaDanehoRoku){
+             if (studium.getStudent().getStudentovoId().equals("243534")){
+                 int dement = 7;
+             }
              List<Pokus> vsechnyPokusyDanehoStudia = studium.getPokusy();
              dosazeneKredityPoTydnech =  new int[53];
              kumulovaneDosazeneKredityPoTydnech = new int[53];
@@ -417,7 +420,7 @@ public class DatainsertController {
          int pica = 666;
 
     }
-   // @GetMapping("/migrate")
+    //@GetMapping("/migrate")
     public void createBarGraph(){
         var x = pokusService.findAllPokuses();
         List<Studium> studia = this.studiumService.findAllStudiumsInGivenYear("2017");
@@ -458,7 +461,7 @@ public class DatainsertController {
             dataBarGraph.setAkademickyRok("2017");
             dataBarGraph.setWeek(tyden);
             dataBarGraph.setPravdepodobnostPass(b);
-            //this.dataBarGraphService.saveDataBarGraph(dataBarGraph);
+            this.dataBarGraphService.saveDataBarGraph(dataBarGraph);
 
 
 
@@ -485,6 +488,16 @@ public class DatainsertController {
                     this.pokusService.savePokus(p);
                 }
 
+            }
+        }
+    }
+    //@GetMapping("/migrate")
+    public void pitkus(){
+        var y = this.pokusService.findAllPokusesInGivenYear("2017");
+        var x = this.studiumService.getAllStudiums();
+        for (Studium s : x){
+            if (s.getKumulovaneKredityPoTydnech().get(52)==17){
+                int kkk = 1;
             }
         }
     }

@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+
+        span{
+            border-width: 50px;
+            border-color: black;
+        }
+        #container{
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+
+        }
+        #content{
+            display: flex;
+            flex-direction: row;
+            flex-grow:10;
+        }
+        #side-menu{
+
+
+
+        }
+
+        #number-of-students{
+            background-color: greenyellow;
+            height: 5vh;
+            width: 15vw;
+        }
+        #pass-students-winter{
+            background-color: green;
+            height: 5vh;
+            width: 15vw;
+        }
+        #pass-students-summer{
+            background-color: green;
+            height: 5vh;
+            width: 15vw;
+        }
+
+        #fail-students-summer{
+            background-color: orangered;
+            height: 5vh;
+            width: 15vw;
+        }
+        #fail-students-winter{
+            background-color: orangered;
+            height: 5vh;
+            width: 15vw;
+        }
+        #fail-students-in-total{
+            background-color: orangered;
+            height: 5vh;
+            width: 15vw;
+        }
+        #show-data{
+            margin-left: 4vw;
+        }
+
+        #student-data{
+            margin-top: 5vh;
+        }
+        #graphs{
+            display: flex;
+            flex-direction: column;
+            flex-grow: 10;
+            position: relative;
+
+            margin-left: 10vw;
+        }
+        #exam-results{
+            height: 34%;
+            border: 2px solid black
+        }
+        #number-of-attemps{
+            height: 33%;
+            border: 2px solid black
+        }
+        #pass-fail-ratio{
+            height: 33%;
+            border: 2px solid black
+        }
+        #examChart{
+            width: 100%;
+            height: 100%;
+        }
+
+
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/homepage}">Study overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"  th:href="@{/coursesOverview}">Courses overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/studentPaths}">Student paths</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About project</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="content">
+        <div id="side-menu">
+            <form id="select-form" action="#" >
+                <div class="form-group">
+                    <label for="select-faculty">Select faculty</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-faculty">
+                        <option selected>Fakulty</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <label for="select-study-program">Select study program</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-study-program">
+                        <option selected>Fakulty</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="select-academic-year">Select academic year</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-academic-year">
+                        <option selected>Fakulty</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="select-comparision">Select comparison dataset</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-comparision">
+                        <option selected>Fakulty</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                <br>
+                <input id="show-data" class="btn btn-primary" type="submit" name="submit" value="Show data">
+                <br/>
+            </form>
+            <div id="student-data">
+                <div id="number-of-students">
+                    Number of students
+                </div>
+                <div id="pass-students-winter">
+                    Pass students winter
+                </div>
+                <div id="fail-students-winter">
+                    Fail students winter
+                </div>
+                <div id="pass-students-summer">
+                    Pass students summer
+                </div>
+                <div id="fail-students-summer">
+                    Fail students summer
+                </div>
+                <div id="fail-students-in-total">
+                    Fail students in total
+                </div>
+                <br/>
+
+            </div>
+
+        </div>
+        <div id="graphs">
+            <div id="exam-results">
+                <h4>Course exam results</h4>
+                <canvas id="examChart1"></canvas>
+            </div>
+            <div id="number-of-attemps">
+                <h4>Course exam number of attempts</h4>
+                <canvas id="examChart2"></canvas>
+            </div>
+            <div id="pass-fail-ratio">
+                <h4>Course pass/fail student ratio</h4>
+                <canvas id="examChart3"></canvas>
+            </div>
+
+        </div>
+        </div>
+    </div>
+
+
+<script>
+    let examBar = document.getElementById('examChart1').getContext('2d');
+
+    let canvas = document.getElementById('examChart1');
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    data = [
+        {
+            nazev: "Matematika 1",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 2",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 3",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 4",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 5",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 6",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 7",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 8",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 9",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 10",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 11",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 12",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 13",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 14",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 15",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 16",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 17",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 18",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 19",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 20",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 21",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 22",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 23",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 24",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 25",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 26",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 27",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 28",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 29",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 30",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 31",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 32",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 33",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 34",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 35",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 36",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 37",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 38",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 39",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 40",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 41",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+        {
+            nazev: "Matematika 42",
+            passFailRatio: 73,
+            pocetA: 25,
+            pocetB: 37,
+            pocetC: 64,
+            pocetD: 75,
+            pocetE: 83,
+            pocetF: 26,
+            posledniUspesnyPokus0: 16,
+            posledniUspesnyPokus1: 227,
+            posledniUspesnyPokus2: 57,
+            posledniUspesnyPokus3: 10,
+            procentoA: 8,
+            procentoB: 11,
+            procentoC: 20,
+            procentoD: 24,
+            procentoE: 26,
+            procentoF: 8,
+        },
+    ]
+
+    let labels_1 = []
+    let data1_1 = []
+    let data1_2 = []
+    let data2_1 = []
+    let data2_2 = []
+    let data2_3 = []
+    let data2_4 = []
+    let data2_5 = []
+    let data2_6 = []
+    let data3_1 = []
+    let data3_2 = []
+    let data3_3 = []
+    let data3_4 = []
+
+    for(let index in data)
+    {
+        let item = data[index]
+        console.log(item)
+        labels_1.push(item.nazev)
+        data1_1.push(100 - item.passFailRatio)
+        data1_2.push(item.passFailRatio)
+
+        let itemA = item.procentoA;
+        let itemB = item.procentoB;
+        let itemC = item.procentoC;
+        let itemD = item.procentoD;
+        let itemE = item.procentoE;
+        let itemF = item.procentoF;
+
+        let inaccuracy = 100 - (itemA + itemB + itemC + itemD + itemE + itemF);
+
+        if(item.procentoA >= item.procentoB && item.procentoA >= item.procentoC && item.procentoA >= item.procentoD
+        && item.procentoA >= item.procentoE && item.procentoA >= item.procentoF)
+            itemA = itemA + inaccuracy;
+        else if(item.procentoB >= item.procentoA && item.procentoB >= item.procentoC && item.procentoB >= item.procentoD
+            && item.procentoB >= item.procentoE && item.procentoB >= item.procentoF)
+            itemB = itemB + inaccuracy;
+        else if(item.procentoC >= item.procentoA && item.procentoC >= item.procentoB && item.procentoC >= item.procentoD
+            && item.procentoC >= item.procentoE && item.procentoC >= item.procentoF)
+            itemC = itemC + inaccuracy;
+        else if(item.procentoD >= item.procentoA && item.procentoD >= item.procentoB && item.procentoD >= item.procentoC
+            && item.procentoD >= item.procentoE && item.procentoD >= item.procentoF)
+            itemD = itemD + inaccuracy;
+        else if(item.procentoE >= item.procentoA && item.procentoE >= item.procentoB && item.procentoE >= item.procentoC
+            && item.procentoE >= item.procentoD && item.procentoE >= item.procentoF)
+            itemE = itemE + inaccuracy;
+        else
+            itemF = itemF + inaccuracy;
+
+        data2_1.push(itemA)
+        data2_2.push(itemB)
+        data2_3.push(itemC)
+        data2_4.push(itemD)
+        data2_5.push(itemE)
+        data2_6.push(itemF)
+
+        let soucetPokusu = item.posledniUspesnyPokus0 + item.posledniUspesnyPokus1 + item.posledniUspesnyPokus2 + item.posledniUspesnyPokus3;
+
+        let item2_A = item.posledniUspesnyPokus0 * 100 / soucetPokusu;
+        let item2_B = item.posledniUspesnyPokus1 * 100 / soucetPokusu;
+        let item2_C = item.posledniUspesnyPokus2 * 100 / soucetPokusu;
+        let item2_D = item.posledniUspesnyPokus3 * 100 / soucetPokusu;
+
+        data3_1.push(item2_A)
+        data3_2.push(item2_B)
+        data3_3.push(item2_C)
+        data3_4.push(item2_D)
+    }
+
+    let myChart = new Chart(examBar, {
+        type: 'bar',
+        data : {
+            labels: labels_1,
+            datasets: [
+                {
+                    label: 'red',
+                    data: data1_1,
+                    backgroundColor: 'red',
+                },
+                {
+                    label: 'green',
+                    data: data1_2,
+                    backgroundColor: 'green',
+                }
+            ],
+        },
+        options: {
+            scales: {
+                x: {
+                    stacked: true,
+                    ticks: {
+                        autoSkip: false,
+                        stepSize: 1,
+                        min: 0
+                    }
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 100,
+                        callback:
+                            function (value) {
+                                return value + "%"
+                            }
+                    }
+                }
+            },
+        }
+    })
+
+    let examBar2 = document.getElementById('examChart2').getContext('2d');
+
+    let canvas2 = document.getElementById('examChart2');
+    canvas2.style.width = '100%';
+    canvas2.style.height = '100%';
+    canvas2.width = canvas2.offsetWidth;
+    canvas2.height = canvas2.offsetHeight;
+
+
+    let myChart2 = new Chart(examBar2, {
+        type: 'bar',
+        data : {
+            labels: labels_1,
+            datasets: [
+                {
+                    label: 'red',
+                    data: data2_1,
+                    backgroundColor: 'red',
+                },
+                {
+                    label: 'green',
+                    data: data2_2,
+                    backgroundColor: 'green',
+                },
+                {
+                    label: 'blue',
+                    data: data2_3,
+                    backgroundColor: 'blue',
+                },
+                {
+                    label: 'pink',
+                    data: data2_4,
+                    backgroundColor: 'pink',
+                },
+                {
+                    label: 'red',
+                    data: data2_5,
+                    backgroundColor: 'red',
+                },
+                {
+                    label: 'violet',
+                    data: data2_6,
+                    backgroundColor: 'violet',
+                }
+            ],
+        },
+        options: {
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 100,
+                        callback:
+                            function (value) {
+                                return value + "%"
+                            }
+                    }
+                }
+            },
+        }
+    });
+
+
+    let examBar3 = document.getElementById('examChart3').getContext('2d');
+
+    let canvas3 = document.getElementById('examChart3');
+    canvas3.style.width = '100%';
+    canvas3.style.height = '100%';
+    canvas3.width = canvas3.offsetWidth;
+    canvas3.height = canvas3.offsetHeight;
+
+
+    let myChart3 = new Chart(examBar3, {
+        type: 'bar',
+        data : {
+            labels: labels_1,
+            datasets: [
+                {
+                    label: 'red',
+                    data: data3_1,
+                    backgroundColor: 'red',
+                },
+                {
+                    label: 'green',
+                    data: data3_2,
+                    backgroundColor: 'green',
+                },
+                {
+                    label: 'yellow',
+                    data: data3_3,
+                    backgroundColor: 'yellow',
+                }
+                ,
+                {
+                    label: 'pink',
+                    data: data3_4,
+                    backgroundColor: 'pink',
+                }
+            ],
+        },
+        options: {
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 100,
+                        callback:
+                            function (value) {
+                                return value + "%"
+                            }
+                    }
+                }
+            },
+        }
+    });
+
+</script>
+</body>
+</html>
