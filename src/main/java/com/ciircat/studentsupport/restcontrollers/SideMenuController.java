@@ -44,7 +44,7 @@ public class SideMenuController {
         String studyProgram = sideMenuState.getStudyProgram();
         String academicYear = sideMenuState.getAcademicYear();
         DataLineGraph dataLineGraph = this.dataLineGraphService.findDataLineGraphByNazevFakultyAndNazevProgramuAndAkademickyRok(faculty,studyProgram,academicYear);
-        
+
         DummyData toReturn = new DummyData();
         toReturn.setNumberOfStudents(407);
         toReturn.setPassStudentsSummer(100);

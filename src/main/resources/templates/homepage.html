@@ -280,7 +280,7 @@
   let showDataClicked = (event)=>{
     event.preventDefault();
     console.log(sideMenuState);
-    axios.post("http://localhost:8080/line-graph-data",sideMenuState)
+    axios.post("http://159.89.100.31:8080/line-graph-data",sideMenuState)
             .then((response) =>{
               numberOfStudents.innerHTML = 'Number of Students ' + response.data.numberOfStudents;
              // passStudentsWinter.innerHTML = 'Pass Students Winter ' + 'TBD';
@@ -352,7 +352,7 @@
 
   let selectFakultyChanged = (event) =>{
     sideMenuState.faculty = event.target.value;
-    axios.get("http://localhost:8080/programs/"+event.target.value).then((response) =>{
+    axios.get("http://159.89.100.31:8080/programs/"+event.target.value).then((response) =>{
       studyPrograms = [];
       data = response.data;
       let index = 0;
@@ -494,7 +494,7 @@
     //barChart.destroy();
     console.log(value);
     sideMenuState.value = value;
-    axios.post("http://localhost:8080/bar-graph-data",sideMenuState).then((response) =>{
+    axios.post("http://159.89.100.31:8080/bar-graph-data",sideMenuState).then((response) =>{
 
       newBarData = {
         type: 'bar',

@@ -421,7 +421,7 @@
 
     let selectFakultyChanged = (event) =>{
         sideMenuState.faculty = event.target.value;
-        axios.get("http://localhost:8080/programs/"+event.target.value).then((response) =>{
+        axios.get("http://159.89.100.31:8080/programs/"+event.target.value).then((response) =>{
             studyPrograms = [];
             data = response.data;
             let index = 0;
@@ -436,7 +436,7 @@
     let showDataClicked = (event)=>{
         event.preventDefault();
         //console.log(sideMenuState);
-        axios.post("http://localhost:8080/courses-overview-data",sideMenuState)
+        axios.post("http://159.89.100.31:8080/courses-overview-data",sideMenuState)
             .then((response) =>{
                 console.log(response);
 
