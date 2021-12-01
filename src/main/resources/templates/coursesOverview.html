@@ -438,7 +438,19 @@
         //console.log(sideMenuState);
         axios.post("http://159.89.100.31:8080/courses-overview-data",sideMenuState)
             .then((response) =>{
-                console.log(response);
+                labels_1 = [];
+                data1_1 = [];
+                data1_2 = [];
+                data2_1 = [];
+                data2_2 = [];
+                data2_3 = [];
+                data2_4 = [];
+                data2_5 = [];
+                data2_6 = [];
+                data3_1 = [];
+                data3_2 = [];
+                data3_3 = [];
+                data3_4 = [];
 
                 for(let index in response.data)
                 {
