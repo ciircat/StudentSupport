@@ -43,19 +43,31 @@ public class SideMenuController {
         String faculty = sideMenuState.getFaculty();
         String studyProgram = sideMenuState.getStudyProgram();
         String academicYear = sideMenuState.getAcademicYear();
+        String typeOfStudium = sideMenuState.getTypeOfStudium();
         DataLineGraph dataLineGraph = this.dataLineGraphService.findDataLineGraphByNazevFakultyAndNazevProgramuAndAkademickyRok(faculty,studyProgram,academicYear);
 
+        System.out.println(sideMenuState);
         DummyData toReturn = new DummyData();
-        toReturn.setNumberOfStudents(407);
+        int numberOfStudents = this.studiumService.findAllStudiumsByAkademickyRokCount(academicYear);
+        toReturn.setNumberOfStudents(numberOfStudents);
         toReturn.setPassStudentsSummer(100);
         toReturn.setFailStudentsSummer(1);
         toReturn.setPassStudentsWinter(99);
         toReturn.setFailStudentsWinter(0);
-        toReturn.setFailStudentsTotal(78);
+        toReturn.setFailStudentsTotal(this.studiumService.findAllStudiumsByPassStatusAndAkademickyRokCount("Fail", academicYear));
         toReturn.setInterventionCreditIntervalStart(10);
         toReturn.setInterventionCreditIntervalStop(50);
-        toReturn.setDataFailed(dataLineGraph.getAverageFailData());
-        toReturn.setDataPassed(dataLineGraph.getAveragePassData());
+        if (typeOfStudium.equals("prezencni")){
+            toReturn.setDataFailed(dataLineGraph.getAverageFailDataAll());
+            toReturn.setDataPassed(dataLineGraph.getAveragePassDataAll());
+        }else if (typeOfStudium.equals("kombinovane")){
+            toReturn.setDataFailed(dataLineGraph.getAverageFailDataKombinovane());
+            toReturn.setDataPassed(dataLineGraph.getAveragePassDataKombinovane());
+        }else {
+            toReturn.setDataFailed(dataLineGraph.getAverageFailDataAll());
+            toReturn.setDataPassed(dataLineGraph.getAveragePassDataAll());
+        }
+
         return toReturn;
     }
 
@@ -99,10 +111,33 @@ public class SideMenuController {
         String faculty = sideMenuState.getFaculty();
         String studyProgram = sideMenuState.getStudyProgram();
         String academicYear = sideMenuState.getAcademicYear();
+        String semestr = sideMenuState.getSemester();
+        String minimumCredit = sideMenuState.getMinimumCredit();
         List<Predmet> predmety = new ArrayList<>();
+        if (semestr.equals("summer")){
+            var x = this.predmetService.kokot(faculty,studyProgram,academicYear, minimumCredit);
+            for (var y : x){
+                if (y.getVyucovanoVSemestrech().contains("LS") && !y.getVyucovanoVSemestrech().contains("ZS")){
+                    predmety.add(y);
+                }
+            }
 
-        //List<Pokus> pokusy = this.pokusService.findAllPokusesByNazevFakultyAndNazevProgramuAndAkademickyRok(faculty,studyProgram,academicYear);
-        predmety = this.predmetService.kokot(faculty,studyProgram,academicYear);
+
+        }else if (semestr.equals("winter")){
+            var x = this.predmetService.kokot(faculty,studyProgram,academicYear, minimumCredit);
+            for (var y : x){
+                if (y.getVyucovanoVSemestrech().contains("ZS") && !y.getVyucovanoVSemestrech().contains("LS")){
+                    predmety.add(y);
+                }
+            }
+
+        }else {
+            //List<Pokus> pokusy = this.pokusService.findAllPokusesByNazevFakultyAndNazevProgramuAndAkademickyRok(faculty,studyProgram,academicYear);
+            predmety = this.predmetService.kokot(faculty,studyProgram,academicYear, minimumCredit);
+
+        }
+
+
         List<PredmetData> data = new ArrayList<>();
 
 

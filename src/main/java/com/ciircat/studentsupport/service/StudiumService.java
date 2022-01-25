@@ -38,4 +38,12 @@ public class StudiumService {
     public List<Studium> findAllStudiumsByPassStatusAndAkademickyRok(String passStatus, String akademickyRok){
         return this.studiumRepository.findAllStudiumsByPassStatusAndAkademickyRok(passStatus,akademickyRok);
     }
+
+    public int findAllStudiumsByAkademickyRokCount(String rok){
+        return this.studiumRepository.findAllStudiumsByAkademickyRokCount(rok);
+    }
+
+    public int findAllStudiumsByPassStatusAndAkademickyRokCount(String passStatus, String rok){
+        return this.studiumRepository.findAllStudiumsByPassStatusAndAkademickyRokCount(passStatus, rok);
+    }
 }

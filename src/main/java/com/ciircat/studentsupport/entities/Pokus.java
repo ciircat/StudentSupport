@@ -12,7 +12,6 @@ public class Pokus extends BaseEntity{
 
     private String akademickyRok;
     private String semestr;
-    private Date datumPokusu;
     private int tydenPokusu;
     private String znamka;
     private int ziskanoKreditu;
@@ -21,6 +20,7 @@ public class Pokus extends BaseEntity{
     private int cisloPokusu;
     private boolean predmetSplnen;
     private boolean jdeOKonecnouZnamku;
+    private String datumPokusu;
 
 
     @ManyToOne
@@ -72,11 +72,11 @@ public class Pokus extends BaseEntity{
         this.semestr = semestr;
     }
 
-    public Date getDatumPokusu() {
+    public String getDatumPokusu() {
         return datumPokusu;
     }
 
-    public void setDatumPokusu(Date datumPokusu) {
+    public void setDatumPokusu(String datumPokusu) {
         this.datumPokusu = datumPokusu;
     }
 

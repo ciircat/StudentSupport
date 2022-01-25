@@ -5,14 +5,44 @@ public class SideMenuState {
     private String studyProgram;
     private String academicYear;
     private String value;
+    private String typeOfStudium;
+    private String semester;
+    private String minimumCredit;
 
     public SideMenuState(){}
 
-    public SideMenuState(String faculty, String studyProgram, String academicYear, String value) {
+    public SideMenuState(String minimumCredit, String semester, String faculty, String studyProgram, String academicYear, String value, String typeOfStudium) {
         this.value = value;
         this.faculty = faculty;
         this.studyProgram = studyProgram;
         this.academicYear = academicYear;
+        this.typeOfStudium = typeOfStudium;
+        this.semester = semester;
+        this.minimumCredit = minimumCredit;
+    }
+
+    public String getMinimumCredit() {
+        return minimumCredit;
+    }
+
+    public void setMinimumCredit(String minimumCredit) {
+        this.minimumCredit = minimumCredit;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
+    public String getTypeOfStudium() {
+        return typeOfStudium;
+    }
+
+    public void setTypeOfStudium(String typeOfStudium) {
+        this.typeOfStudium = typeOfStudium;
     }
 
     public String getValue() {

@@ -1,11 +1,9 @@
 package com.ciircat.studentsupport.entities;
 
 import com.ciircat.studentsupport.enums.Semestr;
+import org.springframework.lang.Nullable;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -19,6 +17,10 @@ public class Predmet extends BaseEntity{
     private String nazevPredmetu;
     private int pocetKreditu;
     private String typUkonceni;
+    private String povinnost;
+    @ElementCollection
+    private List<String> vyucovanoVSemestrech;
+
     @OneToMany(mappedBy = "predmet")
     private List<Pokus> pokusy;
 
@@ -27,6 +29,22 @@ public class Predmet extends BaseEntity{
 
     @ManyToMany(mappedBy = "predmetyOboruSpecializace")
     private Set<OborSpecializace> oborySpecializace;
+
+    public List<String> getVyucovanoVSemestrech() {
+        return vyucovanoVSemestrech;
+    }
+
+    public void setVyucovanoVSemestrech(List<String> vyucovanoVSemestrech) {
+        this.vyucovanoVSemestrech = vyucovanoVSemestrech;
+    }
+
+    public String getPovinnost() {
+        return povinnost;
+    }
+
+    public void setPovinnost(String povinnost) {
+        this.povinnost = povinnost;
+    }
 
     public String getKodPracoviste() {
         return kodPracoviste;

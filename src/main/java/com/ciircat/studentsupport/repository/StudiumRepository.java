@@ -14,8 +14,14 @@ public interface StudiumRepository extends JpaRepository<Studium, Long> {
     @Query(value = "SELECT s from Studium s WHERE s.rokMaturitniZkousky=?1")
     List<Studium> findAllStudiumsByAkademickyRok(String rok);
 
+    @Query(value = "SELECT count(s) from Studium s WHERE s.rokMaturitniZkousky=?1")
+    int findAllStudiumsByAkademickyRokCount(String rok);
+
     @Query(value = "SELECT s from Studium s WHERE s.vysledekPrvnihoRokuStudia = ?1 and s.rokMaturitniZkousky=?2")
     List<Studium> findAllStudiumsByPassStatusAndAkademickyRok(String passStatus, String rok);
+
+    @Query(value = "SELECT count(s) from Studium s WHERE s.vysledekPrvnihoRokuStudia = ?1 and s.rokMaturitniZkousky=?2")
+    int findAllStudiumsByPassStatusAndAkademickyRokCount(String passStatus, String rok);
 
 
 

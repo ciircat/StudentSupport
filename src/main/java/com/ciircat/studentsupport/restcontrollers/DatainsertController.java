@@ -9,6 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,20 +54,33 @@ public class DatainsertController {
          this.pokusService = pokusService;
      }
 
+     /*
+     * Postup při migraci dat:
+     * Nejprve odkomentovat @GetMapping u metody migrateDataFromExcel a přejmenovat umístění souboru tak, aby odpovídalo
+     * tomu co chci migrovat. Poté spustím, zkontroluju DB že došlo k úspěšné migraci, v properties změním z create na
+     * update a je to.
+     *
+     * Potom odkomentuju create data structures a pro každý rok spustím jednou
+     * */
+
 
     //@GetMapping("/migrate")
     public void migrateDataFromExcel(){
-         Univerzita vut = new Univerzita();
+        // vytvořím univerzitu, zadám její jméno a identifikační kód protože je prostě znám a uložím do DB, zároveň si odkaz na
+        // vytvořenou univerzitu uložím do proměné, protože ji budu dál potžebovat
+        Univerzita vut = new Univerzita();
         vut.setNazevUniverzity("Vysoké učení technické");
         vut.setUniverzitniIdentifikacniKod("vut");
         this.savedUniverzita = this.univerzitaService.save(vut);
         var id = savedUniverzita.getId();
+        // Vytvořím fakultu, přidám ji jméno a zkratku které prostě znám a přidám ji univerzitu, kterou jsem přidal v minulém kroku
+        // fakultu potom uložím do DB a odkaz na uloženou fakultu si uložím do proměné na pozdější použití
         Fakulta fsi = new Fakulta();
         fsi.setNazevFakulty("Fakulta strojního inženýrství");
         fsi.setUniverzita(savedUniverzita);
         fsi.setZkratka("fsi");
         this.savedFakulta = this.fakultaService.saveFakulta(fsi);
-
+        // Vytvořím program, přidám mu fakultu a program
         Program program = new Program();
         program.setFakulta(savedFakulta);
         program.setKodProgramu("B");
@@ -83,16 +97,14 @@ public class DatainsertController {
         this.savedOborSpecializace = this.oborSpecializaceService.saveOborSpecializace(oborSpecializace);
 
 
-
-
-        File file = new File("C:\\Users\\filip\\Desktop\\data_vut_zkracene2017.xlsx");
+        File file = new File("C:\\Users\\filip\\Desktop\\data_vut_full_v4.xlsx");
         FileInputStream fileInputStream;
         Set<Predmet> predmety = new HashSet<>();
         Set<Student> studenti = new HashSet<>();
 
 
         try {
-             fileInputStream = new FileInputStream(file);
+            fileInputStream = new FileInputStream(file);
             XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
             XSSFSheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
@@ -103,37 +115,42 @@ public class DatainsertController {
                 if (numberOfRuns > 1){
                     Student student = new Student();
                     student.setStudentovoId(Integer.toString((int)row.getCell(1).getNumericCellValue()));
-                    student.setPohlavi(row.getCell(19).getStringCellValue());
-                    studenti.add(student);
+                    student.setPohlavi(row.getCell(22).getStringCellValue());
+                    Student x = null;
+                    try{
+                        x = this.studentService.findStudentByStudentovoId(student.getStudentovoId());
+
+                    }catch (Exception e){
+                        String idd = student.getStudentovoId();
+                    }
+                    if (x == null){
+                        this.studentService.saveStudent(student);
+                    }
+                    //studenti.add(student);
 
 
 
                     Predmet predmet = new Predmet();
-                    predmet.setNazevPredmetu(row.getCell(4).getStringCellValue());
-                    predmet.setKodPredmetu(row.getCell(5).getStringCellValue());
-                    predmet.setTypUkonceni(row.getCell(6).getStringCellValue());
-                    predmet.setPocetKreditu((int)row.getCell(14).getNumericCellValue());
+                    predmet.setNazevPredmetu(row.getCell(5).getStringCellValue());
+                    predmet.setKodPredmetu(row.getCell(6).getStringCellValue());
+                    predmet.setTypUkonceni(row.getCell(7).getStringCellValue());
+                    predmet.setPovinnost(row.getCell(8).getStringCellValue());
+                    predmet.setPocetKreditu((int)row.getCell(15).getNumericCellValue());
                     Set<Program> programy = new HashSet<>();
                     programy.add(savedProgram);
                     predmet.setProgramy(programy);
                     predmety.add(predmet);
 
-
-
-
-
-
-
                 }
 
 
 
-            }
+            }/*
             int kokot = 666;
             for (Student s : studenti){
                 Student savedStudent = this.studentService.saveStudent(s);
                 this.savedStudents.add(savedStudent);
-            }
+            }*/
 
 
             fileInputStream.close();
@@ -177,34 +194,36 @@ public class DatainsertController {
                     if (studium == null){
                         Studium noveStudium = new Studium();
                         noveStudium.setOborSpecializace(oborSpecializace);
-                        noveStudium.setFormaStudia("prezencni");
+                        noveStudium.setFormaStudia(row.getCell(27).getStringCellValue());
                         noveStudium.setStudent(s);
                         noveStudium.setProgram(program);
-                        noveStudium.setRokMaturitniZkousky(Integer.toString((int)row.getCell(30).getNumericCellValue()));
-                        noveStudium.setVysledekPrvnihoRokuStudia(row.getCell(34).getStringCellValue());
+                        noveStudium.setRokMaturitniZkousky(Integer.toString((int)row.getCell(37).getNumericCellValue()));
+                        noveStudium.setVysledekZimnihoSemestru(row.getCell(40).getStringCellValue());
+                        noveStudium.setVysledekPrvnihoRokuStudia(row.getCell(41).getStringCellValue());
                         Pokus pokus = new Pokus();
                         pokus.setStudium(noveStudium);
                         pokus.setAkademickyRok(Integer.toString((int)row.getCell(2).getNumericCellValue()));
-                        pokus.setTydenPokusu((int)row.getCell(9).getNumericCellValue());
+                        pokus.setTydenPokusu((int)row.getCell(10).getNumericCellValue());
                         pokus.setSemestr(row.getCell(3).getStringCellValue());
+                        pokus.setDatumPokusu(Integer.toString((int)row.getCell(9).getNumericCellValue()));
                         String znamka;
                         try {
-                            znamka = row.getCell(11).getStringCellValue();
+                            znamka = row.getCell(12).getStringCellValue();
                         }catch (NullPointerException exception){
                             znamka = "NA";
                         }
 
                         pokus.setZnamka(znamka);
-                        if (znamka.equals("A") || znamka.equals("B") || znamka.equals("C") || znamka.equals("D") || znamka.equals("E")){
+                        if (znamka.equals("A") || znamka.equals("B") || znamka.equals("C") || znamka.equals("D") || znamka.equals("E") || znamka.equals("S")){
                             pokus.setPredmetSplnen(true);
                         }else {
                             pokus.setPredmetSplnen(false);
                         }
                         pokus.setPredmet(
-                                this.predmetService.findPredmetByNazevPredmetu(row.getCell(4).getStringCellValue())
+                                this.predmetService.findPredmetByNazevPredmetu(row.getCell(5).getStringCellValue())
                         );
-                        pokus.setCisloPokusu((int)row.getCell(10).getNumericCellValue());
-                        if (row.getCell(12).getStringCellValue().equals("A")){
+                        pokus.setCisloPokusu((int)row.getCell(11).getNumericCellValue());
+                        if (row.getCell(13).getStringCellValue().equals("A")){
                             pokus.setJdeOKonecnouZnamku(true);
                         }else {
                             pokus.setJdeOKonecnouZnamku(false);
@@ -222,26 +241,27 @@ public class DatainsertController {
                         Pokus pokus = new Pokus();
                         pokus.setStudium(studium);
                         pokus.setAkademickyRok(Integer.toString((int)row.getCell(2).getNumericCellValue()));
-                        pokus.setTydenPokusu((int)row.getCell(9).getNumericCellValue());
+                        pokus.setTydenPokusu((int)row.getCell(10).getNumericCellValue());
                         pokus.setSemestr(row.getCell(3).getStringCellValue());
+                        pokus.setDatumPokusu(Integer.toString((int)row.getCell(9).getNumericCellValue()));
                         String znamka;
                         try {
-                            znamka = row.getCell(11).getStringCellValue();
+                            znamka = row.getCell(12).getStringCellValue();
                         }catch (NullPointerException exception){
                             znamka = "NA";
                         }
 
                         pokus.setZnamka(znamka);
-                        if (znamka.equals("A") || znamka.equals("B") || znamka.equals("C") || znamka.equals("D") || znamka.equals("E")){
+                        if (znamka.equals("A") || znamka.equals("B") || znamka.equals("C") || znamka.equals("D") || znamka.equals("E") || znamka.equals("S")){
                             pokus.setPredmetSplnen(true);
                         }else {
                             pokus.setPredmetSplnen(false);
                         }
                         pokus.setPredmet(
-                                this.predmetService.findPredmetByNazevPredmetu(row.getCell(4).getStringCellValue())
+                                this.predmetService.findPredmetByNazevPredmetu(row.getCell(5).getStringCellValue())
                         );
-                        pokus.setCisloPokusu((int)row.getCell(10).getNumericCellValue());
-                        if (row.getCell(12).getStringCellValue().equals("A")){
+                        pokus.setCisloPokusu((int)row.getCell(11).getNumericCellValue());
+                        if (row.getCell(13).getStringCellValue().equals("A")){
                             pokus.setJdeOKonecnouZnamku(true);
                         }else {
                             pokus.setJdeOKonecnouZnamku(false);
@@ -278,9 +298,9 @@ public class DatainsertController {
     }
 
     //@GetMapping("/migrate")
-    /*public void createDataStructures(){
-         List<Pokus> pokusyVsechStudiiKtereProslyDoDalsihoRoku = this.pokusService.findAllPokusesByYearAndPassStatus("2017", "Pass");
-         List<Pokus> pokusyVsechStudiiKtereNepryslyDoDalsihoRoku = this.pokusService.findAllPokusesByYearAndPassStatus("2017","Fail");
+    public void createDataStructures(){
+        List<Pokus> pokusyVsechStudiiKtereProslyDoDalsihoRoku = this.pokusService.findAllPokusesByYearAndPassStatus("2019", "Pass");
+        List<Pokus> pokusyVsechStudiiKtereNepryslyDoDalsihoRoku = this.pokusService.findAllPokusesByYearAndPassStatus("2019","Fail");
         int[] dosazeneKredityPoTydnechPass = new int[53];
         int[] dosazeneKredityPoTydnechFail = new int[53];
         int[] kumulovaneDosazeneKredityPoTydnechPass = new int[53];
@@ -289,12 +309,12 @@ public class DatainsertController {
         int[] kumulovaneDosazeneKredityPoTydnechPrumerFail = new int[53];
         int celkemKredituPass = 0;
         int celkemKredituFail = 0;
-        List<Studium> passedStudiumsIn2019 = this.studiumService.findAllStudiumsByPassStatusAndAkademickyRok("Pass","2017");
-        List<Studium> failedStudiumsIn2019 = this.studiumService.findAllStudiumsByPassStatusAndAkademickyRok("Fail","2017");;
-        List<Studium> allStudiumsIn2019 = this.studiumService.findAllStudiumsInGivenYear("2017");
+        List<Studium> passedStudiumsIn2017 = this.studiumService.findAllStudiumsByPassStatusAndAkademickyRok("Pass","2019");
+        List<Studium> failedStudiumsIn2017 = this.studiumService.findAllStudiumsByPassStatusAndAkademickyRok("Fail","2019");;
+        List<Studium> allStudiumsIn2019 = this.studiumService.findAllStudiumsInGivenYear("2019");
         for (Pokus p : pokusyVsechStudiiKtereProslyDoDalsihoRoku){
             if (p.isPredmetSplnen() && p.isJdeOKonecnouZnamku()){
-                if ((p.getTydenPokusu() - 1) > 52){
+                if ((p.getTydenPokusu()) > 53){
                     p.setTydenPokusu(53);
                 }
                 dosazeneKredityPoTydnechPass[p.getTydenPokusu() - 1] += p.getPredmet().getPocetKreditu();
@@ -347,17 +367,17 @@ public class DatainsertController {
 
         index = 0;
         for (int i : kumulovaneDosazeneKredityPoTydnechPass){
-            kumulovaneDosazeneKredityPoTydnechPrumerPass[index] = i/passedStudiumsIn2019.size();
+            kumulovaneDosazeneKredityPoTydnechPrumerPass[index] = i/passedStudiumsIn2017.size();
             index++;
         }
         index = 0;
         for (int i : kumulovaneDosazeneKredityPoTydnechFail){
-            kumulovaneDosazeneKredityPoTydnechPrumerFail[index] = i/failedStudiumsIn2019.size();
+            kumulovaneDosazeneKredityPoTydnechPrumerFail[index] = i/failedStudiumsIn2017.size();
             index++;
         }
 
         DataLineGraph dataLineGraph = new DataLineGraph();
-        dataLineGraph.setAkademickyRok("2017");
+        dataLineGraph.setAkademickyRok("2019");
         dataLineGraph.setNazevUniverzity("Vysoké učení technické");
         dataLineGraph.setNazevFakulty("Fakulta strojního inženýrství");
         dataLineGraph.setNazevProgramu("B");
@@ -372,23 +392,20 @@ public class DatainsertController {
         for (int x : kumulovaneDosazeneKredityPoTydnechPrumerPass){
             kokot2.add(x);
         }
-        dataLineGraph.setAverageFailData(kokot);
-        dataLineGraph.setAveragePassData(kokot2);
+        dataLineGraph.setAverageFailDataAll(kokot);
+        dataLineGraph.setAveragePassDataAll(kokot2);
         this.dataLineGraphService.saveDataLineGrap(dataLineGraph);
 
          int dement = 69;
-    }*/
+    }
     //@GetMapping("/migrate")
     public void createKumulovaneKredity(){
          int[] dosazeneKredityPoTydnech;
          int[] kumulovaneDosazeneKredityPoTydnech;
         var x = pokusService.findAllPokuses();
-          List<Studium> vsechnaStudiaDanehoRoku = this.studiumService.findAllStudiumsInGivenYear("2017");
+          List<Studium> vsechnaStudiaDanehoRoku = this.studiumService.findAllStudiumsInGivenYear("2019");
         //List<Studium> vsechnaStudiaDanehoRoku = this.studiumService.findAllStudiumsByPassStatusAndAkademickyRok("Pass", "2017");
          for (Studium studium : vsechnaStudiaDanehoRoku){
-             if (studium.getStudent().getStudentovoId().equals("243534")){
-                 int dement = 7;
-             }
              List<Pokus> vsechnyPokusyDanehoStudia = studium.getPokusy();
              dosazeneKredityPoTydnech =  new int[53];
              kumulovaneDosazeneKredityPoTydnech = new int[53];
@@ -396,6 +413,7 @@ public class DatainsertController {
 
                  if (p.isPredmetSplnen() && p.isJdeOKonecnouZnamku()){
                      dosazeneKredityPoTydnech[p.getTydenPokusu()] += p.getPredmet().getPocetKreditu();
+
                  }
              }
              int index = 0;
@@ -420,10 +438,65 @@ public class DatainsertController {
          int pica = 666;
 
     }
-    //@GetMapping("/migrate")
-    public void createBarGraph(){
+
+   // @GetMapping("/migrate")
+    public void kokot(){
         var x = pokusService.findAllPokuses();
-        List<Studium> studia = this.studiumService.findAllStudiumsInGivenYear("2017");
+        List<Studium> vsechnaStudiaDanehoRoku = this.studiumService.findAllStudiumsInGivenYear("2017");
+        for (Studium s : vsechnaStudiaDanehoRoku){
+            var y = s.getAbsolvovanePredmetyPoTydnech();
+            int kokot = 69;
+        }
+
+    }
+
+    //@GetMapping("/migrate")
+    public void createAbsolvovanePredmetyPoTydnech(){
+        String[] predmetyPoTydnech;
+        var x = pokusService.findAllPokuses();
+        List<Studium> vsechnaStudiaDanehoRoku = this.studiumService.findAllStudiumsInGivenYear("2017");
+        //List<Studium> vsechnaStudiaDanehoRoku = this.studiumService.findAllStudiumsByPassStatusAndAkademickyRok("Pass", "2017");
+        for (Studium studium : vsechnaStudiaDanehoRoku){
+             predmetyPoTydnech = new String[53];
+            List<Pokus> vsechnyPokusyDanehoStudia = studium.getPokusy();
+
+            for (Pokus p : vsechnyPokusyDanehoStudia){
+
+                if (p.isPredmetSplnen() && p.isJdeOKonecnouZnamku()){
+                    if (p.getPredmet().getPocetKreditu()>0){
+                        if (predmetyPoTydnech[p.getTydenPokusu()-1]==null){
+                            predmetyPoTydnech[p.getTydenPokusu()-1] = Long.toString(p.getPredmet().getId());
+                        }else {
+                            predmetyPoTydnech[p.getTydenPokusu()-1] = predmetyPoTydnech[p.getTydenPokusu()-1]+","+Long.toString(p.getPredmet().getId());
+                        }
+
+                    }
+
+                }
+
+            }
+            List<String> l = new ArrayList<>();
+            for (int i = 0; i<53; i++){
+                if (predmetyPoTydnech[i] == null){
+                    l.add(i,"v");
+
+                }else {
+                    l.add(i,predmetyPoTydnech[i]);
+                }
+
+            }
+            studium.setAbsolvovanePredmetyPoTydnech(l);
+            this.studiumService.saveStudium(studium);
+
+    }
+
+    }
+
+    //@GetMapping("/migrate")
+    @Transactional
+    public void createBarGraph(){
+        //var x = pokusService.findAllPokuses();
+        List<Studium> studia = this.studiumService.findAllStudiumsInGivenYear("2018");
         List<int[]> d = new ArrayList<>();
         for (int tyden = 0; tyden < 53; tyden++){
             List<List<Studium>> a = new ArrayList<>();
@@ -458,7 +531,7 @@ public class DatainsertController {
             dataBarGraph.setNazevfakulty("Fakulta strojního inženýrství");
             dataBarGraph.setNazevProgramu("B");
             dataBarGraph.setKodOboruSpecializace("2341R006");
-            dataBarGraph.setAkademickyRok("2017");
+            dataBarGraph.setAkademickyRok("2018");
             dataBarGraph.setWeek(tyden);
             dataBarGraph.setPravdepodobnostPass(b);
             this.dataBarGraphService.saveDataBarGraph(dataBarGraph);
@@ -490,6 +563,51 @@ public class DatainsertController {
 
             }
         }
+    }
+
+    //@GetMapping("/migrate")
+    public void giveSemesterToPredmety(){
+
+        File file = new File("C:\\Users\\filip\\Desktop\\data_vut_full_v4.xlsx");
+        FileInputStream fileInputStream;
+        Set<Predmet> predmety = new HashSet<>();
+
+        try {
+            fileInputStream = new FileInputStream(file);
+            XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rowIterator = sheet.iterator();
+            int numberOfRuns = 0;
+            while (rowIterator.hasNext()){
+                numberOfRuns++;
+                Row row = rowIterator.next();
+                if (numberOfRuns > 1){
+                    Predmet predmet = predmetService.findPredmetByNazevPredmetu(row.getCell(5).getStringCellValue());
+                    String semestr = row.getCell(4).getStringCellValue();
+                    if (!predmet.getVyucovanoVSemestrech().contains(semestr)){
+                        predmet.getVyucovanoVSemestrech().add(semestr);
+                    }
+
+                    predmetService.savePredmet(predmet);
+
+
+
+
+                }
+
+            }
+
+
+            fileInputStream.close();
+
+        }catch (Exception exception){
+            System.out.println(exception.getMessage());
+            exception.printStackTrace();
+
+        }
+        int hotovo = 1;
+
+
     }
     //@GetMapping("/migrate")
     public void pitkus(){

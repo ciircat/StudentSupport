@@ -7,4 +7,6 @@ public interface DataLineGraphRepository extends JpaRepository<DataLineGraph, Lo
     DataLineGraph findDataLineGraphByNazevUniverzityAndNazevFakultyAndNazevProgramuAndKodProgramuAndNazevOboruSpecializaceAndAkademickyRok(String nazevUniverzity, String nazevFakulty, String nazevProgramu, String kodProgramu, String kodOboruSpecializace, String akademickyRok);
 
     DataLineGraph findDataLineGraphByNazevFakultyAndNazevProgramuAndAkademickyRok(String nazevFakulty, String nazevProgramu, String akademickyRok);
+
+    //DataLineGraph findDataLineGraphByNazevFakultyAndNazevProgramuAndAkademickyRok(String nazevFakulty, String nazevProgramu, String akademickyRok,);
 }

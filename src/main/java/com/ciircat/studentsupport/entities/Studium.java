@@ -11,15 +11,23 @@ public class Studium extends BaseEntity{
 
     private String formaStudia;
     private String vysledekPrvnihoRokuStudia;
+    private String vysledekZimnihoSemestru;
     private String rokMaturitniZkousky;
+
     @ElementCollection
     private List<Integer> kumulovaneKredityPoTydnech;
+    /*
+    * Pozice v listu odpovídá týdnu a samotná entita na dané pozici je String reprezentující id daného předmětu v DB
+    * Jelikož student může v daném týdnu absolvovat více předmětů, budou jednotlivě předměty oddělený čárkou tedy symbolem ,
+    * */
+    @ElementCollection
+    private List<String> absolvovanePredmetyPoTydnech = new ArrayList<>(52);
 
     @ManyToOne
     @JoinColumn(name = "program_id", referencedColumnName = "id")
     private Program program;
 
-    @OneToMany(mappedBy = "studium")
+    @OneToMany(mappedBy = "studium", fetch= FetchType.EAGER)
     private List<Pokus> pokusy = new ArrayList<>();
 
     @ManyToOne
@@ -47,6 +55,24 @@ public class Studium extends BaseEntity{
     public Pokus addPokus(Pokus pokus){
         this.pokusy.add(pokus);
         return pokus;
+    }
+
+    public void addAbsolvovanyPredmetVDanemTydnu(Predmet predmet, int tyden){
+        String previously = this.absolvovanePredmetyPoTydnech.get(tyden - 1);
+        if (previously.equals("")){
+            this.absolvovanePredmetyPoTydnech.add(Long.toString(predmet.getId()));
+        }else {
+            this.absolvovanePredmetyPoTydnech.add(","+Long.toString(predmet.getId()));
+        }
+
+    }
+
+    public String getVysledekZimnihoSemestru() {
+        return vysledekZimnihoSemestru;
+    }
+
+    public void setVysledekZimnihoSemestru(String vysledekZimnihoSemestru) {
+        this.vysledekZimnihoSemestru = vysledekZimnihoSemestru;
     }
 
     public String getVysledekPrvnihoRokuStudia() {
@@ -111,5 +137,13 @@ public class Studium extends BaseEntity{
 
     public void setKumulovaneKredityPoTydnech(List<Integer> kumulovaneKredityPoTydnech) {
         this.kumulovaneKredityPoTydnech = kumulovaneKredityPoTydnech;
+    }
+
+    public List<String> getAbsolvovanePredmetyPoTydnech() {
+        return absolvovanePredmetyPoTydnech;
+    }
+
+    public void setAbsolvovanePredmetyPoTydnech(List<String> absolvovanePredmetyPoTydnech) {
+        this.absolvovanePredmetyPoTydnech = absolvovanePredmetyPoTydnech;
     }
 }

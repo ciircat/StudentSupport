@@ -1,0 +1,115 @@
+{
+  "name": "Volno",
+  "children": [{
+    "name": "Matematika 1",
+    "children": [{
+      "name": "Volno",
+      "children": [{
+        "name": "Fyzika 1",
+        "size": 3938
+      }, {
+        "name": "Komunikační dovednosti",
+        "size": 3812
+      }, {
+        "name": "Základy algoritmizace",
+        "size": 6714
+      }, {
+        "name": "Angličtina",
+        "size": 743
+      }]
+    }, {
+      "name": "Fyzika 1",
+      "children": [{
+        "name": "Volno",
+        "size": 3534
+      }, {
+        "name": "Komunikační dovednosti",
+        "size": 5731
+      }, {
+        "name": "Angličtina",
+        "size": 7840
+      }]
+    }, {
+      "name": "Základy algoritmizace",
+      "children": [{
+        "name": "BetweennessCentrality",
+        "size": 3534
+      }, {
+        "name": "LinkDistance",
+        "size": 5731
+      }, {
+        "name": "MaxFlowMinCut",
+        "size": 7840
+      }, {
+        "name": "ShortestPaths",
+        "size": 5914
+      }, {
+        "name": "SpanningTree",
+        "size": 3416
+      }]
+    }]
+  }, {
+    "name": "Fyzika 1",
+    "children": [{
+      "name": "Angličtina",
+      "children": [{
+        "name": "Marketing",
+        "size": 1983
+      }, {
+        "name": "Podniková ekonomika",
+        "size": 2047
+      }, {
+        "name": "Projektové řízení",
+        "size": 1375
+      }, {
+        "name": "Programování v Javě",
+        "size": 8746
+      }, {
+        "name": "Základy programování",
+        "size": 2202
+      }, {
+        "name": "Enterprise architektura",
+        "size": 1382
+      }, {
+        "name": "Objektové modelování",
+        "size": 1629
+      }]
+    }, {
+      "name": "Matematika 1",
+      "size": 9201
+    }, {
+      "name": "Základy algoritmizace",
+      "size": 19975
+    }, {
+      "name": "Volno",
+      "size": 1116
+    }, {
+      "name": "Němčina",
+      "size": 6006
+    }]
+  }, {
+    "name": "Základy algoritmizace",
+    "children": [{
+      "name": "Marketing",
+      "size": 1983
+    }, {
+      "name": "Podniková ekonomika",
+      "size": 2047
+    }, {
+      "name": "Projektové řízení",
+      "size": 1375
+    }, {
+      "name": "Programování v Javě",
+      "size": 8746
+    }, {
+      "name": "Základy programování",
+      "size": 2202
+    }, {
+      "name": "Enterprise architektura",
+      "size": 1382
+    }, {
+      "name": "Objektové modelování",
+      "size": 1629
+    }]
+  }]
+}

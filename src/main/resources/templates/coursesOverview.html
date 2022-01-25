@@ -161,12 +161,25 @@
                 </div>
                 <br>
                 <div class="form-group">
-                    <label for="select-comparision">Select comparison dataset</label>
-                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-comparision">
-                        <option selected>Fakulty</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <label for="select-semester">Select semester</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-semester">
+                        <option selected>Semester</option>
+                        <option value="year">Full year</option>
+                        <option value="summer">Summer</option>
+                        <option value="winter">Winter</option>
+                    </select>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="select-minimum-credit">Select minimum number of credit</label>
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="select-minimum-credit">
+                        <option selected>Minimum number of credits</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
                     </select>
                 </div>
                 <br>
@@ -393,7 +406,9 @@
     let sideMenuState = {
         faculty: '',
         studyProgram: '',
-        academicYear: ''
+        academicYear: '',
+        semester: '',
+        minimumCredit: ''
     };
 
     let clearStudyProgramOptions = () =>{
@@ -421,22 +436,26 @@
 
     let selectFakultyChanged = (event) =>{
         sideMenuState.faculty = event.target.value;
-        axios.get("http://159.89.100.31:8080/programs/"+event.target.value).then((response) =>{
+        axios.get("http://localhost:8080/programs/"+event.target.value).then((response) =>{
             studyPrograms = [];
             data = response.data;
             let index = 0;
             data.forEach((program) => {
-                studyPrograms[index] = program;
+                studyPrograms[index] = program + "/2341R006";
                 index++;
             })
             updateSideMenuPrograms();
         });
     }
 
+    let selectSemesterChanged = (event)=>{
+        sideMenuState.semester = event.target.value;
+    }
+
     let showDataClicked = (event)=>{
         event.preventDefault();
         //console.log(sideMenuState);
-        axios.post("http://159.89.100.31:8080/courses-overview-data",sideMenuState)
+        axios.post("http://localhost:8080/courses-overview-data",sideMenuState)
             .then((response) =>{
                 labels_1 = [];
                 data1_1 = [];
@@ -663,18 +682,24 @@
     }
 
     let selectStudyProgramChanged = (event)=>{
-        sideMenuState.studyProgram = event.target.value;
+        sideMenuState.studyProgram = "B";
     }
 
     let selectAcademicYearChanged = (event)=>{
         sideMenuState.academicYear = event.target.value;
     }
 
+    let selectMinimumCreditChanged = (event) =>{
+        sideMenuState.minimumCredit = event.target.value;
+    }
 
     let selectStudyProgram = document.getElementById('select-study-program');
     let selectAcademicYear = document.getElementById('select-academic-year');
     selectStudyProgram.addEventListener('change', selectStudyProgramChanged);
     selectAcademicYear.addEventListener('change', selectAcademicYearChanged);
+
+    let selectMinimumCredit = document.getElementById('select-minimum-credit');
+    selectMinimumCredit.addEventListener('change', selectMinimumCreditChanged)
 
 
 
@@ -683,6 +708,9 @@
 
     let showData = document.getElementById('show-data');
     showData.addEventListener('click', showDataClicked);
+
+    let selectSemester = document.getElementById('select-semester');
+    selectSemester.addEventListener('change', selectSemesterChanged);
 
 </script>
 </body>

@@ -18,10 +18,17 @@ public class DataLineGraph{
     private String kodOboruSpecializace;
     private String akademickyRok;
     @ElementCollection
-    private List<Integer> averagePassData;
+    private List<Integer> averagePassDataAll;
     @ElementCollection
-    private List<Integer> averageFailData;
-
+    private List<Integer> averageFailDataAll;
+    @ElementCollection
+    private List<Integer> averagePassDataPrezencni;
+    @ElementCollection
+    private List<Integer> averageFailDataPrezencni;
+    @ElementCollection
+    private List<Integer> averagePassDataKombinovane;
+    @ElementCollection
+    private List<Integer> averageFailDataKombinovane;
 
 
     /*@OneToMany(cascade = CascadeType.ALL ,mappedBy = "dataLineGraph")
@@ -35,22 +42,6 @@ public class DataLineGraph{
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<Integer> getAveragePassData() {
-        return averagePassData;
-    }
-
-    public void setAveragePassData(List<Integer> averagePassData) {
-        this.averagePassData = averagePassData;
-    }
-
-    public List<Integer> getAverageFailData() {
-        return averageFailData;
-    }
-
-    public void setAverageFailData(List<Integer> averageFailData) {
-        this.averageFailData = averageFailData;
     }
 
     public String getNazevUniverzity() {
@@ -108,20 +99,52 @@ public class DataLineGraph{
     public void setAkademickyRok(String akademickyRok) {
         this.akademickyRok = akademickyRok;
     }
-/*
-    public List<WeekAveragePass> getPassAverages() {
-        return passAverages;
+
+    public List<Integer> getAveragePassDataKombinovane() {
+        return averagePassDataKombinovane;
     }
 
-    public void setPassAverages(List<WeekAveragePass> passAverages) {
-        this.passAverages = passAverages;
+    public void setAveragePassDataKombinovane(List<Integer> averagePassDataKombinovane) {
+        this.averagePassDataKombinovane = averagePassDataKombinovane;
     }
 
-    public List<WeekAverageFail> getFailAverages() {
-        return failAverages;
+    public List<Integer> getAverageFailDataKombinovane() {
+        return averageFailDataKombinovane;
     }
 
-    public void setFailAverages(List<WeekAverageFail> failAverages) {
-        this.failAverages = failAverages;
-    }*/
+    public void setAverageFailDataKombinovane(List<Integer> averageFailDataKombinovane) {
+        this.averageFailDataKombinovane = averageFailDataKombinovane;
+    }
+
+    public List<Integer> getAveragePassDataAll() {
+        return averagePassDataAll;
+    }
+
+    public void setAveragePassDataAll(List<Integer> averagePassDataAll) {
+        this.averagePassDataAll = averagePassDataAll;
+    }
+
+    public List<Integer> getAverageFailDataAll() {
+        return averageFailDataAll;
+    }
+
+    public void setAverageFailDataAll(List<Integer> averageFailDataAll) {
+        this.averageFailDataAll = averageFailDataAll;
+    }
+
+    public List<Integer> getAveragePassDataPrezencni() {
+        return averagePassDataPrezencni;
+    }
+
+    public void setAveragePassDataPrezencni(List<Integer> averagePassDataPrezencni) {
+        this.averagePassDataPrezencni = averagePassDataPrezencni;
+    }
+
+    public List<Integer> getAverageFailDataPrezencni() {
+        return averageFailDataPrezencni;
+    }
+
+    public void setAverageFailDataPrezencni(List<Integer> averageFailDataPrezencni) {
+        this.averageFailDataPrezencni = averageFailDataPrezencni;
+    }
 }

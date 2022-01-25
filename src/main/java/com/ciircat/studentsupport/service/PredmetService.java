@@ -32,8 +32,13 @@ public class PredmetService {
         }
     }
 
-    public List<Predmet> kokot(String nazevFakulty, String nazevProgramu, String akademickyRok){
-        return this.predmetRepository.kokot(nazevFakulty, nazevProgramu, akademickyRok);
+    public List<Predmet> findAll(){
+        return this.predmetRepository.findAll();
+    }
+
+    public List<Predmet> kokot(String nazevFakulty, String nazevProgramu, String akademickyRok, String minimumKreditu){
+        int pocetKreditu = Integer.parseInt(minimumKreditu);
+        return this.predmetRepository.kokot(nazevFakulty, nazevProgramu, akademickyRok, pocetKreditu);
     }
 
 }
